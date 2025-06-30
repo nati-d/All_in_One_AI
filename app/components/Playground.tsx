@@ -48,7 +48,7 @@ export default function Playground() {
 							<DropdownMenuTrigger asChild>
 								<Button
 									variant='ghost'
-									className='text-lg font-semibold px-0 text-foreground bg-transparent hover:bg-accent/30 focus:bg-accent/30'
+									className='text-base font-semibold px-0 text-foreground bg-transparent hover:bg-primary/20 focus:bg-primary/20 transition-colors'
 								>
 									{selectedModel}
 									<ChevronDown className='ml-2 h-5 w-5' />
@@ -59,7 +59,7 @@ export default function Playground() {
 									<DropdownMenuItem
 										key={model}
 										onClick={() => setSelectedModel(model)}
-										className='text-foreground hover:bg-accent/40'
+										className='text-base text-foreground hover:bg-primary/20 focus:bg-primary/30 transition-colors'
 									>
 										{model}
 									</DropdownMenuItem>
@@ -79,20 +79,20 @@ export default function Playground() {
 							handleSendMessage();
 						}}
 					>
-						<div className='flex items-end gap-2 bg-muted/10 rounded-2xl p-4 border border-border/10'>
+						<div className='flex items-end gap-2 bg-secondary rounded-2xl p-4 border border-border/10'>
 							<Button
 								type='button'
 								variant='ghost'
 								size='icon'
-								className='text-muted-foreground'
+								className='text-foreground/70'
 							>
 								<Paperclip className='h-5 w-5' />
 							</Button>
 							<Textarea
 								value={message}
 								onChange={(e) => setMessage(e.target.value)}
-								placeholder='Message to Humiris'
-								className='flex-1 resize-none border-none bg-transparent text-foreground placeholder:text-muted-foreground shadow-none focus:ring-0 focus:outline-none min-h-[32px] max-h-32'
+								placeholder='Message to All In One AI'
+								className='flex-1 resize-none bg-transparent text-foreground placeholder:text-foreground/60 min-h-[32px] max-h-32 outline-none border-none ring-0 shadow-none focus:outline-none focus:border-none focus:ring-0'
 								onKeyDown={(e) => {
 									if (e.key === "Enter" && !e.shiftKey) {
 										e.preventDefault();
@@ -143,7 +143,7 @@ export default function Playground() {
 							max={2}
 							min={0}
 							step={0.1}
-							className='w-full'
+							className='w-full h-1'
 						/>
 					</div>
 				</div>
