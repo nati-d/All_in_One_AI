@@ -79,49 +79,38 @@ export default function Playground() {
 
 	return (
 		<div className='min-h-screen bg-background flex flex-col pt-16'>
-			{/* Header */}
-			<header className='bg-secondary border-b border-border p-4 shadow-sm'>
-				<div className='flex items-center justify-between max-w-7xl mx-auto'>
-					<div className='flex items-center gap-4'>
-						<h1 className='text-xl font-semibold text-foreground'>H-Models Playground</h1>
-						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
-								<Button
-									variant='outline'
-									className='text-foreground bg-background border-border hover:bg-accent'
-								>
-									<span className='mr-2'>{selectedModel}</span>
-									<ChevronDown className='h-4 w-4' />
-								</Button>
-							</DropdownMenuTrigger>
-							<DropdownMenuContent className='bg-background border-border'>
-								{models.map((model) => (
-									<DropdownMenuItem
-										key={model}
-										onClick={() => setSelectedModel(model)}
-										className='text-foreground hover:bg-accent'
-									>
-										{model}
-									</DropdownMenuItem>
-								))}
-							</DropdownMenuContent>
-						</DropdownMenu>
-					</div>
-					<Button
-						variant='outline'
-						size='sm'
-						onClick={() => setShowSettings(!showSettings)}
-						className='lg:hidden text-foreground bg-background border-border hover:bg-accent'
-					>
-						<Settings className='h-4 w-4' />
-					</Button>
-				</div>
-			</header>
-
 			{/* Main Content */}
 			<div className='flex-1 flex max-w-7xl mx-auto w-full'>
 				{/* Chat Area */}
 				<div className='flex-1 flex flex-col min-h-0'>
+					{/* Model Selection */}
+					<div className='p-4 border-b border-border bg-secondary'>
+						<div className='max-w-4xl mx-auto'>
+							<DropdownMenu>
+								<DropdownMenuTrigger asChild>
+									<Button
+										variant='outline'
+										className='text-foreground bg-background border-border hover:bg-accent'
+									>
+										<span className='mr-2'>{selectedModel}</span>
+										<ChevronDown className='h-4 w-4' />
+									</Button>
+								</DropdownMenuTrigger>
+								<DropdownMenuContent className='bg-background border-border'>
+									{models.map((model) => (
+										<DropdownMenuItem
+											key={model}
+											onClick={() => setSelectedModel(model)}
+											className='text-foreground hover:bg-accent'
+										>
+											{model}
+										</DropdownMenuItem>
+									))}
+								</DropdownMenuContent>
+							</DropdownMenu>
+						</div>
+					</div>
+
 					{/* Messages */}
 					<ScrollArea className='flex-1 p-4'>
 						<div className='space-y-6 max-w-4xl mx-auto'>
