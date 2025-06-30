@@ -1,9 +1,5 @@
-import React from 'react'
+import Playground from "../components/Playground";
 
-const page = () => {
-  return (
-    <div>page</div>
-  )
+export default function PlaygroundPage() {
+	return <Playground />;
 }
-
-export default page 
