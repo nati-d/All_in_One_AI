@@ -34,7 +34,16 @@ export default function Playground() {
 		};
 		setMessages((prev) => [...prev, userMessage]);
 		setMessage("");
-		// Simulate AI response (optional)
+		// Simulate system/AI response
+		setTimeout(() => {
+			const systemMessage: Message = {
+				id: (Date.now() + 1).toString(),
+				role: "assistant",
+				content: "This is a simulated system response.",
+				timestamp: new Date(),
+			};
+			setMessages((prev) => [...prev, systemMessage]);
+		}, 900);
 	};
 
 	return (
@@ -68,8 +77,23 @@ export default function Playground() {
 						</DropdownMenu>
 					</div>
 
-					{/* Chat Messages (empty state for now) */}
-					<div className='flex-1 flex flex-col justify-end'>{/* Messages would go here, but keep empty for minimal look */}</div>
+					{/* Chat Messages */}
+					<div className='flex-1 flex flex-col justify-end overflow-y-auto px-6 py-4 gap-4'>
+						{messages.length === 0 && <div className='text-center text-muted-foreground text-base'>No messages yet. Start the conversation!</div>}
+						{messages.map((msg, idx) => (
+							<div
+								key={msg.id}
+								className='flex flex-col gap-1'
+							>
+								<div className={`text-sm ${msg.role === "user" ? "text-primary-foreground text-right" : "text-foreground text-left"}`}>
+									{msg.content}
+								</div>
+								<div className={`text-xs text-muted-foreground ${msg.role === "user" ? "text-right" : "text-left"}`}>
+									{msg.timestamp.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"})}
+								</div>
+							</div>
+						))}
+					</div>
 
 					{/* Bottom: Message Input */}
 					<form
