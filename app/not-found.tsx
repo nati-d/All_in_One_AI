@@ -6,15 +6,26 @@ import {useState, useEffect} from "react";
 
 export default function NotFound() {
 	const [mousePosition, setMousePosition] = useState({x: 0, y: 0});
+	const [isClient, setIsClient] = useState(false);
 
 	useEffect(() => {
+		setIsClient(true);
+
 		const handleMouseMove = (e: MouseEvent) => {
 			setMousePosition({x: e.clientX, y: e.clientY});
 		};
 
-		window.addEventListener("mousemove", handleMouseMove);
-		return () => window.removeEventListener("mousemove", handleMouseMove);
+		if (typeof window !== "undefined") {
+			window.addEventListener("mousemove", handleMouseMove);
+			return () => window.removeEventListener("mousemove", handleMouseMove);
+		}
 	}, []);
+
+	const handleGoBack = () => {
+		if (typeof window !== "undefined") {
+			window.history.back();
+		}
+	};
 
 	return (
 		<div
@@ -26,15 +37,15 @@ export default function NotFound() {
 				<div
 					className='absolute w-96 h-96 bg-gradient-to-r from-primary/20 to-blue-500/20 rounded-full blur-3xl animate-pulse'
 					style={{
-						left: mousePosition.x * 0.02 + "px",
-						top: mousePosition.y * 0.02 + "px",
+						left: isClient ? mousePosition.x * 0.02 + "px" : "50%",
+						top: isClient ? mousePosition.y * 0.02 + "px" : "50%",
 					}}
 				/>
 				<div
 					className='absolute w-80 h-80 bg-gradient-to-r from-secondary/20 to-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000'
 					style={{
-						right: (window.innerWidth - mousePosition.x) * 0.015 + "px",
-						bottom: (window.innerHeight - mousePosition.y) * 0.015 + "px",
+						right: isClient ? (window.innerWidth - mousePosition.x) * 0.015 + "px" : "20%",
+						bottom: isClient ? (window.innerHeight - mousePosition.y) * 0.015 + "px" : "20%",
 					}}
 				/>
 				<div className='absolute top-1/4 right-1/3 w-64 h-64 bg-gradient-to-r from-primary/15 to-cyan-500/15 rounded-full blur-2xl animate-bounce delay-500' />
@@ -69,7 +80,7 @@ export default function NotFound() {
 					</Link>
 
 					<button
-						onClick={() => window.history.back()}
+						onClick={handleGoBack}
 						className='group flex items-center px-8 py-4 bg-secondary/80 backdrop-blur-sm hover:bg-secondary border border-border/20 hover:border-primary/30 text-foreground hover:text-primary font-semibold rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-xl'
 					>
 						<ArrowLeft className='w-5 h-5 mr-3 group-hover:animate-pulse' />
