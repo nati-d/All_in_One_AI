@@ -39,7 +39,7 @@ export default function DashboardLayout({children}: {children: React.ReactNode})
 									<div className='w-8 h-8 bg-primary rounded-lg flex items-center justify-center mr-3'>
 										<span className='text-primary-foreground font-bold text-sm'>A</span>
 									</div>
-									<span className='text-lg font-bold text-foreground'>All In On</span>
+									<span className='text-lg font-bold text-foreground'>All In One AI</span>
 								</div>
 							)}
 							<button

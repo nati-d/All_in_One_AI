@@ -30,7 +30,7 @@ export default function UsagePage() {
 			{/* Header */}
 			<div className='mb-8'>
 				<h1 className='text-3xl font-bold text-foreground mb-2'>Usage Dashboard</h1>
-				<p className='text-foreground/70'>Manage your usage and monitor your All In On experience.</p>
+				<p className='text-foreground/70'>Manage your usage and monitor your All In One AI experience.</p>
 			</div>
 
 			{/* Usage Stats Cards */}

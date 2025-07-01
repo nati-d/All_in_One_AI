@@ -615,7 +615,7 @@ export default function PricingPage() {
 						<h2 className='text-4xl font-bold text-foreground mb-6'>
 							Frequently Asked <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>Questions</span>
 						</h2>
-						<p className='text-xl text-foreground/80'>Everything you need to know about All In On pricing and features.</p>
+						<p className='text-xl text-foreground/80'>Everything you need to know about All In One AI pricing and features.</p>
 					</div>
 
 					<div className='space-y-6'>
@@ -680,7 +680,7 @@ export default function PricingPage() {
 						<h2 className='text-4xl font-bold text-foreground mb-6'>
 							Need a <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>Custom Solution?</span>
 						</h2>
-						<p className='text-xl text-foreground/80 mb-8'>Let's discuss how All In On can be tailored to your enterprise needs.</p>
+						<p className='text-xl text-foreground/80 mb-8'>Let's discuss how All In One AI can be tailored to your enterprise needs.</p>
 					</div>
 
 					<div className='bg-gradient-to-br from-background to-secondary/10 p-8 rounded-2xl border border-border/20'>
@@ -781,7 +781,7 @@ export default function PricingPage() {
 						Ready to Get <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>Started?</span>
 					</h2>
 					<p className='text-xl text-foreground/80 mb-8 leading-relaxed'>
-						Join thousands of users who have transformed their conversations with All In On.
+						Join thousands of users who have transformed their conversations with All In One AI.
 					</p>
 					<div className='flex flex-col sm:flex-row gap-4 justify-center'>
 						<Link

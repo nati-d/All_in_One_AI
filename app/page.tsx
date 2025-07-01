@@ -18,7 +18,7 @@ export default function Home() {
 						<h1 className='text-5xl sm:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-tight'>
 							Welcome to{" "}
 							<span className='bg-gradient-to-r from-primary via-primary/80 to-secondary bg-clip-text text-transparent animate-pulse'>
-								All In On
+								All In One AI
 							</span>
 						</h1>
 
@@ -33,7 +33,7 @@ export default function Home() {
 								href='/playground'
 								className='group relative bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-primary/25'
 							>
-								<span className='relative z-10'>Try All In On</span>
+								<span className='relative z-10'>Try All In One AI</span>
 								<div className='absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
 							</Link>
 							<Link
@@ -71,7 +71,7 @@ export default function Home() {
 				<div className='relative max-w-7xl mx-auto'>
 					<div className='text-center mb-16'>
 						<h2 className='text-4xl sm:text-5xl font-bold text-foreground mb-6'>
-							Why Choose <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>All In On?</span>
+							Why Choose <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>All In One AI?</span>
 						</h2>
 						<p className='text-xl text-foreground/80 max-w-3xl mx-auto'>
 							Built with cutting-edge technology to deliver intelligent, context-aware conversations.
@@ -418,7 +418,7 @@ export default function Home() {
 							What Our <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>Users Say</span>
 						</h2>
 						<p className='text-xl text-foreground/80 max-w-3xl mx-auto'>
-							Join thousands of satisfied customers who have transformed their workflows with All In On.
+							Join thousands of satisfied customers who have transformed their workflows with All In One AI.
 						</p>
 					</div>
 
@@ -435,8 +435,8 @@ export default function Home() {
 								</div>
 							</div>
 							<p className='text-foreground/80 leading-relaxed'>
-								"All In On has revolutionized how we handle customer support. The AI responses are incredibly accurate and our team can focus on
-								complex cases."
+								"All In One AI has revolutionized how we handle customer support. The AI responses are incredibly accurate and our team can
+								focus on complex cases."
 							</p>
 						</div>
 
@@ -480,7 +480,7 @@ export default function Home() {
 				<div className='absolute inset-0 bg-gradient-to-r from-primary/10 via-background to-secondary/10'></div>
 				<div className='relative max-w-4xl mx-auto text-center'>
 					<h2 className='text-4xl sm:text-5xl font-bold text-foreground mb-6'>
-						Ready to Experience <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>All In On?</span>
+						Ready to Experience <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>All In One AI?</span>
 					</h2>
 					<p className='text-xl text-foreground/80 mb-8 leading-relaxed'>
 						Join thousands of users who have transformed their conversations with intelligent AI assistance.
@@ -511,7 +511,7 @@ export default function Home() {
 								<div className='w-8 h-8 bg-primary rounded-lg flex items-center justify-center mr-3'>
 									<span className='text-primary-foreground font-bold text-lg'>A</span>
 								</div>
-								<span className='text-xl font-bold text-foreground'>All In On</span>
+								<span className='text-xl font-bold text-foreground'>All In One AI</span>
 							</div>
 							<p className='text-foreground/70 mb-4 max-w-md'>
 								Advanced AI-powered conversations for the modern world. Experience intelligent, context-aware interactions.
@@ -631,7 +631,7 @@ export default function Home() {
 						</div>
 					</div>
 					<div className='border-t border-border/20 mt-12 pt-8 text-center'>
-						<p className='text-foreground/70'>© 2024 All In On. All rights reserved.</p>
+						<p className='text-foreground/70'>© 2024 All In One AI. All rights reserved.</p>
 					</div>
 				</div>
 			</footer>
