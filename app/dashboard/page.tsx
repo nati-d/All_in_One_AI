@@ -20,7 +20,7 @@ export default function DashboardPage() {
 			<div className='flex'>
 				{/* Sidebar */}
 				<div
-					className={`bg-gradient-to-b from-background to-secondary/10 border-r border-border/20 transition-all duration-300 ${
+					className={`fixed top-24 left-0 h-screen bg-gradient-to-b from-background to-secondary/10 border-r border-border/20 transition-all duration-300 ${
 						sidebarCollapsed ? "w-16" : "w-64"
 					}`}
 				>
@@ -77,7 +77,7 @@ export default function DashboardPage() {
 				</div>
 
 				{/* Main Content */}
-				<div className='flex-1 p-6'>
+				<div className={`flex-1 p-6 ${sidebarCollapsed ? "ml-16" : "ml-64"}`}>
 					{/* Header */}
 					<div className='mb-8'>
 						<h1 className='text-3xl font-bold text-foreground mb-2'>{activeSidebar.charAt(0).toUpperCase() + activeSidebar.slice(1)} Dashboard</h1>
