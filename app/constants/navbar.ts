@@ -26,7 +26,7 @@ export const NAV_ITEMS: NavItem[] = [
 
 export const ACCOUNT_ITEM: NavItem = {
 	label: "Account",
-	href: "/account",
+	href: "/profile",
 };
 
 export const LOGO_CONFIG = {
