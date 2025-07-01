@@ -47,8 +47,13 @@ export default function Playground() {
 	};
 
 	return (
-		<div className='min-h-screen bg-background flex flex-col pt-20'>
-			<div className='flex flex-1 w-full max-w-full h-[calc(100vh-2rem)] px-4 gap-4'>
+		<div
+			className='min-h-screen bg-background flex flex-col pt-20'
+		>
+			<div
+				className='flex flex-1 w-full max-w-full px-4 gap-4'
+				style={{height: "calc(100vh - var(--navbar-height, 4rem) - 2rem)"}}
+			>
 				{/* Left: Chat Area */}
 				<div className='flex flex-col flex-1 rounded-xl border border-border/10 bg-background/80 overflow-hidden'>
 					{/* Top: Model Selector */}

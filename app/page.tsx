@@ -2,9 +2,12 @@ import Link from "next/link";
 
 export default function Home() {
 	return (
-		<div className='min-h-screen bg-background overflow-hidden'>
+		<div className='min-h-screen bg-background overflow-hidden pt-16'>
 			{/* Hero Section with Gradient Background */}
-			<section className='relative pt-24 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden'>
+			<section
+				className='relative pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden'
+				style={{paddingTop: "var(--navbar-height, 4rem)"}}
+			>
 				{/* Animated Gradient Background */}
 				<div className='absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-secondary/20 animate-pulse'></div>
 				<div className='absolute inset-0 bg-gradient-to-tl from-background via-transparent to-primary/10'></div>

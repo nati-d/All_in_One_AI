@@ -19,13 +19,17 @@ export default function DashboardLayout({children}: {children: React.ReactNode})
 	];
 
 	return (
-		<div className='min-h-screen bg-background pt-24'>
+		<div
+			className='min-h-screen bg-background'
+			style={{paddingTop: "var(--navbar-height, 4rem)"}}
+		>
 			<div className='flex'>
 				{/* Sidebar */}
 				<div
-					className={`fixed top-24 left-0 h-screen bg-gradient-to-b from-background to-secondary/10 border-r border-border/20 transition-all duration-300 ${
+					className={`fixed left-0 h-screen bg-gradient-to-b from-background to-secondary/10 border-r border-border/20 transition-all duration-300 ${
 						sidebarCollapsed ? "w-16" : "w-64"
 					}`}
+					style={{top: "var(--navbar-height, 4rem)"}}
 				>
 					<div className='p-4'>
 						{/* Sidebar Header */}

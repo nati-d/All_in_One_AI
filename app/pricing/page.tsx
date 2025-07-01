@@ -2,7 +2,10 @@ import Link from "next/link";
 
 export default function PricingPage() {
 	return (
-		<div className='min-h-screen bg-background pt-24'>
+		<div
+			className='min-h-screen bg-background'
+			style={{paddingTop: "var(--navbar-height, 4rem)"}}
+		>
 			{/* Hero Section */}
 			<section className='py-16 px-4 sm:px-6 lg:px-8 relative'>
 				<div className='absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-secondary/10'></div>

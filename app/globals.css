@@ -45,6 +45,7 @@
 
 :root {
 	--radius: 0.625rem;
+	--navbar-height: 4rem;
 	--background: #24262d;
 	--foreground: oklch(1 0 0);
 	--card: oklch(1 0 0);
