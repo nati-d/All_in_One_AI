@@ -3,6 +3,7 @@
 import {useState} from "react";
 import Link from "next/link";
 import {BarChart3, Menu, MessageSquare, Zap, HardDrive, Calendar} from "lucide-react";
+import {LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar} from "recharts";
 
 export default function DashboardPage() {
 	const [activeSidebar, setActiveSidebar] = useState("usage");
@@ -92,6 +93,27 @@ export default function DashboardPage() {
 }
 
 function UsageContent() {
+	// Sample data for charts
+	const conversationData = [
+		{name: "Mon", conversations: 120, apiCalls: 450},
+		{name: "Tue", conversations: 180, apiCalls: 520},
+		{name: "Wed", conversations: 150, apiCalls: 480},
+		{name: "Thu", conversations: 220, apiCalls: 600},
+		{name: "Fri", conversations: 280, apiCalls: 720},
+		{name: "Sat", conversations: 200, apiCalls: 550},
+		{name: "Sun", conversations: 160, apiCalls: 480},
+	];
+
+	const apiCallData = [
+		{name: "00:00", calls: 45},
+		{name: "04:00", calls: 32},
+		{name: "08:00", calls: 78},
+		{name: "12:00", calls: 120},
+		{name: "16:00", calls: 95},
+		{name: "20:00", calls: 65},
+		{name: "24:00", calls: 48},
+	];
+
 	return (
 		<div className='space-y-6'>
 			{/* Usage Stats Cards */}
@@ -161,15 +183,111 @@ function UsageContent() {
 			<div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
 				<div className='bg-gradient-to-br from-background to-secondary/10 p-6 rounded-xl border border-border/20'>
 					<h3 className='text-lg font-semibold text-foreground mb-4'>Conversation Usage</h3>
-					<div className='h-64 bg-secondary/10 rounded-lg flex items-center justify-center'>
-						<span className='text-foreground/50'>Usage chart placeholder</span>
+					<div className='h-64'>
+						<ResponsiveContainer
+							width='100%'
+							height='100%'
+						>
+							<AreaChart data={conversationData}>
+								<defs>
+									<linearGradient
+										id='conversationGradient'
+										x1='0'
+										y1='0'
+										x2='0'
+										y2='1'
+									>
+										<stop
+											offset='5%'
+											stopColor='#3b82f6'
+											stopOpacity={0.3}
+										/>
+										<stop
+											offset='95%'
+											stopColor='#3b82f6'
+											stopOpacity={0}
+										/>
+									</linearGradient>
+								</defs>
+								<CartesianGrid
+									strokeDasharray='3 3'
+									stroke='#374151'
+									opacity={0.3}
+								/>
+								<XAxis
+									dataKey='name'
+									stroke='#9ca3af'
+									fontSize={12}
+									tickLine={false}
+									axisLine={false}
+								/>
+								<YAxis
+									stroke='#9ca3af'
+									fontSize={12}
+									tickLine={false}
+									axisLine={false}
+								/>
+								<Tooltip
+									contentStyle={{
+										backgroundColor: "#1f2937",
+										border: "1px solid #374151",
+										borderRadius: "8px",
+										color: "#f9fafb",
+									}}
+								/>
+								<Area
+									type='monotone'
+									dataKey='conversations'
+									stroke='#3b82f6'
+									strokeWidth={2}
+									fill='url(#conversationGradient)'
+								/>
+							</AreaChart>
+						</ResponsiveContainer>
 					</div>
 				</div>
 
 				<div className='bg-gradient-to-br from-background to-secondary/10 p-6 rounded-xl border border-border/20'>
 					<h3 className='text-lg font-semibold text-foreground mb-4'>API Call Trends</h3>
-					<div className='h-64 bg-secondary/10 rounded-lg flex items-center justify-center'>
-						<span className='text-foreground/50'>API usage chart placeholder</span>
+					<div className='h-64'>
+						<ResponsiveContainer
+							width='100%'
+							height='100%'
+						>
+							<BarChart data={apiCallData}>
+								<CartesianGrid
+									strokeDasharray='3 3'
+									stroke='#374151'
+									opacity={0.3}
+								/>
+								<XAxis
+									dataKey='name'
+									stroke='#9ca3af'
+									fontSize={12}
+									tickLine={false}
+									axisLine={false}
+								/>
+								<YAxis
+									stroke='#9ca3af'
+									fontSize={12}
+									tickLine={false}
+									axisLine={false}
+								/>
+								<Tooltip
+									contentStyle={{
+										backgroundColor: "#1f2937",
+										border: "1px solid #374151",
+										borderRadius: "8px",
+										color: "#f9fafb",
+									}}
+								/>
+								<Bar
+									dataKey='calls'
+									fill='#10b981'
+									radius={[4, 4, 0, 0]}
+								/>
+							</BarChart>
+						</ResponsiveContainer>
 					</div>
 				</div>
 			</div>
