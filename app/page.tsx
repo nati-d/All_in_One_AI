@@ -20,6 +20,7 @@ import {
 	MessageSquare,
 	CheckCircle,
 	Star,
+	Paperclip,
 } from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
@@ -357,7 +358,7 @@ export default function AllInOneAIPage() {
 					{/* Input Area */}
 					<div className='bg-background p-4'>
 						<div className='max-w-4xl mx-auto relative'>
-							<div className='bg-card rounded-2xl shadow-lg border border-border overflow-hidden flex items-center'>
+							<div className='bg-card rounded-2xl shadow-lg border border-border overflow-hidden flex items-center p-2'>
 								<Input
 									className='border-none bg-transparent py-4 px-6 flex-grow focus:ring-0 focus:outline-none text-foreground placeholder:text-muted-foreground'
 									placeholder='Message All In One AI...'
@@ -368,10 +369,20 @@ export default function AllInOneAIPage() {
 								/>
 								<Button
 									size='icon'
-									className='h-12 w-12 rounded-full mr-1'
+									className='h-10 w-10 rounded-full mr-2 bg-transparent hover:bg-muted'
+									variant='ghost'
+									onClick={() => {
+										// File sharing functionality
+									}}
+								>
+									<Paperclip className='w-5 h-5 text-muted-foreground hover:text-foreground' />
+								</Button>
+								<Button
+									size='icon'
+									className='h-12 w-12 rounded-full mr-1 bg-primary hover:bg-primary/90 active:bg-primary/80 disabled:bg-muted disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200'
 									variant='ghost'
 									onClick={() => handleSendMessage()}
-									disabled={isLoading}
+									disabled={isLoading || !input.trim()}
 								>
 									<Send
 										className='w-5 h-5 text-primary-foreground'
