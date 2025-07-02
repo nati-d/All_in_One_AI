@@ -24,58 +24,20 @@ import {
 } from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
-import {cn} from "@/lib/utils";
+import {cn, formatTimestamp} from "@/lib/utils";
+import {SendQuery} from "@/app/api/query";
+import type {SendQueryResponse} from "@/app/types/query";
 
 interface Message {
 	sender: "user" | "assistant";
 	text: string;
+	timestamp: Date;
+	llm_used?: string;
 }
 
 // Static responses for All In One AI
 const getStaticResponse = (userMessage: string): string => {
-	const message = userMessage.toLowerCase();
-
-	// Agent-related responses
-	if (message.includes("agent") || message.includes("agents")) {
-		if (message.includes("available") || message.includes("view") || message.includes("show")) {
-			return "I can help you with several types of agents:\n\n• **Task Automation Agents** - Automate repetitive workflows\n• **Data Analysis Agents** - Process and analyze data\n• **Customer Service Agents** - Handle customer inquiries\n• **Content Creation Agents** - Generate articles, emails, and reports\n• **Integration Agents** - Connect with external tools and APIs\n\nWould you like me to help you create a specific type of agent?";
-		}
-		if (message.includes("create") || message.includes("new")) {
-			return "To create a new agent:\n\n1. **Choose Agent Type** - Select from our pre-built templates\n2. **Configure Settings** - Set up triggers, actions, and parameters\n3. **Test & Deploy** - Validate your agent and deploy it\n4. **Monitor & Optimize** - Track performance and make improvements\n\nWhat type of agent would you like to create?";
-		}
-		return "I'm your All In One AI assistant! I can help you create, manage, and optimize AI agents for various tasks. What would you like to know about agents?";
-	}
-
-	// Automation responses
-	if (message.includes("automate") || message.includes("automation")) {
-		if (message.includes("task") || message.includes("idea")) {
-			return "Here are some great automation ideas:\n\n• **Email Management** - Auto-categorize and respond to emails\n• **Data Entry** - Extract data from documents and forms\n• **Social Media** - Schedule posts and engage with followers\n• **Customer Support** - Handle common inquiries automatically\n• **Report Generation** - Create weekly/monthly reports\n• **File Organization** - Sort and categorize files automatically\n\nWhich area interests you most?";
-		}
-		return "Automation can save you hours every week! I can help you identify repetitive tasks and create agents to handle them automatically. What specific tasks do you find yourself doing repeatedly?";
-	}
-
-	// Getting started responses
-	if (message.includes("start") || message.includes("getting started") || message.includes("guide")) {
-		return "Welcome to All In One AI! Here's how to get started:\n\n1. **Explore Capabilities** - Check out the quick actions in the sidebar\n2. **Create Your First Agent** - Start with a simple automation task\n3. **Connect Integrations** - Link your favorite tools and services\n4. **Monitor Performance** - Track how your agents are performing\n5. **Scale Up** - Create more complex workflows as you get comfortable\n\nWhat's your first goal with AI automation?";
-	}
-
-	// Best practices responses
-	if (message.includes("best practice") || message.includes("effective")) {
-		return "Here are the best practices for creating effective agents:\n\n• **Start Simple** - Begin with basic tasks before complex workflows\n• **Clear Instructions** - Be specific about what you want the agent to do\n• **Test Thoroughly** - Always test in a safe environment first\n• **Monitor Performance** - Regularly check how your agents are performing\n• **Iterate & Improve** - Use feedback to continuously enhance your agents\n• **Security First** - Ensure proper access controls and data protection\n\nWould you like me to help you implement any of these practices?";
-	}
-
-	// Success stories responses
-	if (message.includes("success") || message.includes("example") || message.includes("story")) {
-		return "Here are some inspiring success stories:\n\n• **Marketing Team** - Automated email campaigns increased engagement by 40%\n• **Customer Support** - Reduced response time from 2 hours to 5 minutes\n• **Data Analysis** - Automated weekly reports saved 15 hours per week\n• **Content Creation** - Generated 50+ blog posts per month automatically\n• **Sales Team** - Automated lead qualification improved conversion by 25%\n\nWhich success story resonates with your goals?";
-	}
-
-	// Features and capabilities responses
-	if (message.includes("feature") || message.includes("capability") || message.includes("what can")) {
-		return "All In One AI offers powerful capabilities:\n\n• **Multi-Agent Orchestration** - Coordinate multiple agents for complex tasks\n• **Natural Language Processing** - Understand and respond to human language\n• **Integration Hub** - Connect with 100+ popular tools and services\n• **Custom Training** - Train agents on your specific data and workflows\n• **Analytics Dashboard** - Monitor performance and optimize agents\n• **API Access** - Build custom integrations and applications\n\nWhat specific capability would you like to explore?";
-	}
-
-	// Default response
-	return "I'm here to help you with All In One AI! I can assist with creating agents, automating tasks, and optimizing your workflows. What would you like to know or accomplish today?";
+	return "I'm currently experiencing high traffic and can't process your request right now. Please try again in a few minutes. Our team is working to restore full functionality.";
 };
 
 export default function AllInOneAIPage() {
@@ -83,6 +45,8 @@ export default function AllInOneAIPage() {
 	const [input, setInput] = useState("");
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
+	const [isConnected, setIsConnected] = useState(true);
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 
 	// Scroll to bottom of messages when new messages are added
@@ -91,20 +55,52 @@ export default function AllInOneAIPage() {
 	}, [messages]);
 
 	// Add function to handle sending messages
-	const handleSendMessage = (messageText?: string) => {
+	const handleSendMessage = async (messageText?: string) => {
 		const textToSend = messageText || input.trim();
 		if (!textToSend) return;
 
 		setInput("");
-		setMessages((prev) => [...prev, {sender: "user", text: textToSend}]);
+		setMessages((prev) => [...prev, {sender: "user", text: textToSend, timestamp: new Date()}]);
 		setIsLoading(true);
 
-		// Simulate loading delay for better UX
-		setTimeout(() => {
-			const response = getStaticResponse(textToSend);
-			setMessages((prev) => [...prev, {sender: "assistant", text: response}]);
+		try {
+			// Call the backend API
+			const response: SendQueryResponse = await SendQuery(textToSend);
+
+			// Reset connection status on successful API call
+			setIsConnected(true);
+			setError(null);
+
+			setMessages((prev) => [
+				...prev,
+				{
+					sender: "assistant",
+					text: response.response,
+					timestamp: new Date(),
+					llm_used: response.llm_used,
+				},
+			]);
+		} catch (error) {
+			console.error("Error sending message:", error);
+			setError("Failed to connect to AI service. Using fallback response.");
+			setIsConnected(false);
+
+			// Fallback to static response if API fails
+			const fallbackResponse = getStaticResponse(textToSend);
+			setMessages((prev) => [
+				...prev,
+				{
+					sender: "assistant",
+					text: fallbackResponse,
+					timestamp: new Date(),
+				},
+			]);
+
+			// Clear error after 5 seconds
+			setTimeout(() => setError(null), 5000);
+		} finally {
 			setIsLoading(false);
-		}, 1000);
+		}
 	};
 
 	// Handle clicking on example prompts
@@ -305,6 +301,12 @@ export default function AllInOneAIPage() {
 								</div>
 							</div>
 
+							{/* Connection Status */}
+							<div className='flex items-center gap-2 mr-4'>
+								<div className={cn("w-2 h-2 rounded-full", isConnected ? "bg-green-500" : "bg-red-500")} />
+								<span className='text-xs text-muted-foreground'>{isConnected ? "Connected" : "Offline"}</span>
+							</div>
+
 							{/* Menu Toggle */}
 							<div
 								className='relative group cursor-pointer'
@@ -327,6 +329,9 @@ export default function AllInOneAIPage() {
 				</div>
 
 				<div className='flex-1 flex flex-col min-h-0'>
+					{/* Error Notification */}
+					{error && <div className='bg-destructive/10 border border-destructive/20 text-destructive px-4 py-2 text-sm text-center'>{error}</div>}
+
 					{/* Chat Messages or Welcome Content */}
 					{messages.length === 0 ? (
 						<div className='flex-1 flex flex-col items-center justify-center max-w-4xl mx-auto w-full px-4'>
@@ -371,16 +376,33 @@ export default function AllInOneAIPage() {
 											)}
 										>
 											<p className='whitespace-pre-wrap leading-relaxed'>{message.text}</p>
+											<div
+												className={cn(
+													"flex items-center justify-between mt-2 text-xs opacity-70",
+													message.sender === "user" ? "text-primary-foreground/70" : "text-muted-foreground"
+												)}
+											>
+												<span>{formatTimestamp(message.timestamp)}</span>
+												{message.llm_used && (
+													<span className='flex items-center gap-1'>
+														<Bot className='w-3 h-3' />
+														{message.llm_used}
+													</span>
+												)}
+											</div>
 										</div>
 									</div>
 								))}
 								{isLoading && (
 									<div className='flex justify-start'>
 										<div className='max-w-[85%] p-4 rounded-2xl bg-muted'>
-											<div className='flex space-x-2'>
-												<div className='w-2 h-2 bg-muted-foreground rounded-full animate-bounce' />
-												<div className='w-2 h-2 bg-muted-foreground rounded-full animate-bounce delay-100' />
-												<div className='w-2 h-2 bg-muted-foreground rounded-full animate-bounce delay-200' />
+											<div className='flex items-center space-x-3'>
+												<div className='flex space-x-2'>
+													<div className='w-2 h-2 bg-muted-foreground rounded-full animate-bounce' />
+													<div className='w-2 h-2 bg-muted-foreground rounded-full animate-bounce delay-100' />
+													<div className='w-2 h-2 bg-muted-foreground rounded-full animate-bounce delay-200' />
+												</div>
+												<span className='text-sm text-muted-foreground'>All In One AI is thinking...</span>
 											</div>
 										</div>
 									</div>
