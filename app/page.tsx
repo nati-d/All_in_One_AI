@@ -275,9 +275,9 @@ export default function AllInOneAIPage() {
 
 						{/* User Info */}
 						<div className='flex-1 min-w-0'>
-							<p className='text-sm font-medium text-foreground truncate'>John Doe</p>
-							<p className='text-xs text-muted-foreground truncate'>john.doe@example.com</p>
-						</div>
+							<p className='text-sm font-medium text-foreground truncate'>Abebe Kebede</p>
+							<p className='text-xs text-muted-foreground truncate'>abebe.kebede@example.com</p>
+						</div>		
 
 						{/* Logout Button */}
 						<Button
@@ -316,12 +316,6 @@ export default function AllInOneAIPage() {
 									</h1>
 									<p className='text-xs text-muted-foreground'>Your AI Assistant</p>
 								</div>
-							</div>
-
-							{/* Connection Status */}
-							<div className='flex items-center gap-2 mr-4'>
-								<div className={cn("w-2 h-2 rounded-full", isConnected ? "bg-green-500" : "bg-red-500")} />
-								<span className='text-xs text-muted-foreground'>{isConnected ? "Connected" : "Offline"}</span>
 							</div>
 
 							{/* Menu Toggle */}
