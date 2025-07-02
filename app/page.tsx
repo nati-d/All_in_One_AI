@@ -264,13 +264,30 @@ export default function AllInOneAIPage() {
 				</div>
 
 				<div className='p-4 shadow-lg bg-card'>
-					<Button
-						variant='ghost'
-						className='w-full justify-start text-muted-foreground hover:text-foreground'
-					>
-						<LogOut className='w-4 h-4 mr-2' />
-						Logout
-					</Button>
+					<div className='flex items-center space-x-3 p-3 rounded-lg hover:bg-muted transition-colors cursor-pointer group'>
+						{/* Avatar */}
+						<div className='relative'>
+							<div className='w-10 h-10 bg-gradient-to-br from-primary to-primary/70 rounded-full flex items-center justify-center shadow-lg'>
+								<span className='text-primary-foreground font-semibold text-sm'>JD</span>
+							</div>
+							<div className='absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-card'></div>
+						</div>
+
+						{/* User Info */}
+						<div className='flex-1 min-w-0'>
+							<p className='text-sm font-medium text-foreground truncate'>John Doe</p>
+							<p className='text-xs text-muted-foreground truncate'>john.doe@example.com</p>
+						</div>
+
+						{/* Logout Button */}
+						<Button
+							variant='ghost'
+							size='icon'
+							className='h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-foreground'
+						>
+							<LogOut className='w-4 h-4' />
+						</Button>
+					</div>
 				</div>
 			</div>
 
