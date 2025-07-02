@@ -5,23 +5,7 @@ export interface NavItem {
 }
 
 export const NAV_ITEMS: NavItem[] = [
-	{
-		label: "Dashboard",
-		href: "/dashboard",
-	},
-	{
-		label: "Playground",
-		href: "/playground",
-	},
-	{
-		label: "Pricing",
-		href: "/pricing",
-	},
-	{
-		label: "Docs",
-		href: "/docs",
-		external: true,
-	},
+	// All pages removed - keeping only home page
 ];
 
 export const ACCOUNT_ITEM: NavItem = {
