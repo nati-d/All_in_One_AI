@@ -11,7 +11,7 @@ interface Message {
 	text: string;
 }
 
-// Static responses for the master agent
+// Static responses for All In One AI
 const getStaticResponse = (userMessage: string): string => {
 	const message = userMessage.toLowerCase();
 
@@ -23,7 +23,7 @@ const getStaticResponse = (userMessage: string): string => {
 		if (message.includes("create") || message.includes("new")) {
 			return "To create a new agent:\n\n1. **Choose Agent Type** - Select from our pre-built templates\n2. **Configure Settings** - Set up triggers, actions, and parameters\n3. **Test & Deploy** - Validate your agent and deploy it\n4. **Monitor & Optimize** - Track performance and make improvements\n\nWhat type of agent would you like to create?";
 		}
-		return "I'm your Master Agent assistant! I can help you create, manage, and optimize AI agents for various tasks. What would you like to know about agents?";
+		return "I'm your All In One AI assistant! I can help you create, manage, and optimize AI agents for various tasks. What would you like to know about agents?";
 	}
 
 	// Automation responses
@@ -58,7 +58,7 @@ const getStaticResponse = (userMessage: string): string => {
 	return "I'm here to help you with All In One AI! I can assist with creating agents, automating tasks, and optimizing your workflows. What would you like to know or accomplish today?";
 };
 
-export default function MasterAgentPage() {
+export default function AllInOneAIPage() {
 	const [sidebarOpen, setSidebarOpen] = useState(false);
 	const [input, setInput] = useState("");
 	const [messages, setMessages] = useState<Message[]>([]);
@@ -118,7 +118,7 @@ export default function MasterAgentPage() {
 				<div className='p-4 border-b border-border'>
 					<div className='flex items-center gap-2 mb-4'>
 						<Bot className='w-6 h-6 text-primary' />
-						<h2 className='font-semibold text-lg text-foreground'>Master Agent</h2>
+						<h2 className='font-semibold text-lg text-foreground'>All In One AI</h2>
 					</div>
 					<div className='relative'>
 						<Search className='w-4 h-4 absolute left-3 top-3 text-muted-foreground' />
@@ -249,14 +249,14 @@ export default function MasterAgentPage() {
 							<h1 className='text-2xl sm:text-3xl font-semibold mb-2 text-center text-foreground'>
 								Welcome to <span className='gradient-text'>All In One AI</span>
 							</h1>
-							<p className='text-muted-foreground mb-8 sm:mb-12 text-center'>Your Master Agent Assistant</p>
+							<p className='text-muted-foreground mb-8 sm:mb-12 text-center'>Your All In One AI Assistant</p>
 
 							<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 w-full'>
 								{[
 									"Hello! Can you tell me about All In One AI and what it offers?",
 									"What types of AI agents are available in the system?",
 									"How can I create and customize my own AI agent?",
-									"What are the key features and capabilities of the master agent?",
+									"What are the key features and capabilities of All In One AI?",
 								].map((prompt, i) => (
 									<div
 										key={i}
