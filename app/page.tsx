@@ -134,7 +134,7 @@ export default function AllInOneAIPage() {
 					sidebarOpen ? "translate-x-0" : "-translate-x-full"
 				)}
 			>
-				<div className='p-4 border-b border-border'>
+				<div className='p-4'>
 					<div className='flex items-center gap-2 mb-4'>
 						<Bot className='w-6 h-6 text-primary' />
 						<h2 className='font-semibold text-lg text-foreground'>All In One AI</h2>
@@ -148,7 +148,7 @@ export default function AllInOneAIPage() {
 					</div>
 				</div>
 
-				<div className='flex-1 overflow-auto p-4'>
+				<div className='flex-1 overflow-auto p-4 shadow-inner'>
 					<div className='space-y-6'>
 						{/* Quick Actions Section - now at the top */}
 						<div>
@@ -158,21 +158,21 @@ export default function AllInOneAIPage() {
 							</div>
 							<div className='space-y-2'>
 								<div
-									className='text-sm hover:bg-muted p-2 rounded cursor-pointer flex items-center text-foreground transition-colors'
+									className='text-sm hover:bg-muted p-2 rounded cursor-pointer flex items-center text-foreground transition-colors shadow-sm'
 									onClick={() => handleQuickAction("Show me my available agents")}
 								>
 									<Users className='w-4 h-4 mr-2 text-primary' />
 									View My Agents
 								</div>
 								<div
-									className='text-sm hover:bg-muted p-2 rounded cursor-pointer flex items-center text-foreground transition-colors'
+									className='text-sm hover:bg-muted p-2 rounded cursor-pointer flex items-center text-foreground transition-colors shadow-sm'
 									onClick={() => handleQuickAction("What tasks can I automate?")}
 								>
 									<Lightbulb className='w-4 h-4 mr-2 text-primary' />
 									Automation Ideas
 								</div>
 								<div
-									className='text-sm hover:bg-muted p-2 rounded cursor-pointer flex items-center text-foreground transition-colors'
+									className='text-sm hover:bg-muted p-2 rounded cursor-pointer flex items-center text-foreground transition-colors shadow-sm'
 									onClick={() => handleQuickAction("How do I create a new agent?")}
 								>
 									<PlusCircle className='w-4 h-4 mr-2 text-primary' />
@@ -189,17 +189,47 @@ export default function AllInOneAIPage() {
 							</div>
 							<div className='space-y-1'>
 								{/* Example chat history items - no icons */}
-								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors'>
+								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors shadow-sm'>
 									<span className='truncate'>How to create an AI agent</span>
 								</div>
-								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors'>
+								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors shadow-sm'>
 									<span className='truncate'>Automation ideas for business</span>
 								</div>
-								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors'>
+								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors shadow-sm'>
 									<span className='truncate'>Best practices for agents</span>
 								</div>
-								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors'>
+								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors shadow-sm'>
 									<span className='truncate'>Customer service automation</span>
+								</div>
+								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors shadow-sm'>
+									<span className='truncate'>Data analysis workflow setup</span>
+								</div>
+								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors shadow-sm'>
+									<span className='truncate'>Email marketing automation</span>
+								</div>
+								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors shadow-sm'>
+									<span className='truncate'>Social media management</span>
+								</div>
+								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors shadow-sm'>
+									<span className='truncate'>Lead generation strategies</span>
+								</div>
+								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors shadow-sm'>
+									<span className='truncate'>Content creation workflow</span>
+								</div>
+								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors shadow-sm'>
+									<span className='truncate'>Project management automation</span>
+								</div>
+								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors shadow-sm'>
+									<span className='truncate'>Inventory tracking system</span>
+								</div>
+								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors shadow-sm'>
+									<span className='truncate'>Financial reporting setup</span>
+								</div>
+								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors shadow-sm'>
+									<span className='truncate'>HR process automation</span>
+								</div>
+								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors shadow-sm'>
+									<span className='truncate'>Sales pipeline optimization</span>
 								</div>
 							</div>
 						</div>
@@ -211,21 +241,21 @@ export default function AllInOneAIPage() {
 							</div>
 							<div className='space-y-2'>
 								<div
-									className='text-sm hover:bg-muted p-2 rounded cursor-pointer flex items-center text-foreground transition-colors'
+									className='text-sm hover:bg-muted p-2 rounded cursor-pointer flex items-center text-foreground transition-colors shadow-sm'
 									onClick={() => handlePromptClick("How do I get started with All In One AI?")}
 								>
 									<BookOpen className='w-4 h-4 mr-2 text-primary' />
 									Getting Started Guide
 								</div>
 								<div
-									className='text-sm hover:bg-muted p-2 rounded cursor-pointer flex items-center text-foreground transition-colors'
+									className='text-sm hover:bg-muted p-2 rounded cursor-pointer flex items-center text-foreground transition-colors shadow-sm'
 									onClick={() => handlePromptClick("What are the best practices for creating effective agents?")}
 								>
 									<CheckCircle className='w-4 h-4 mr-2 text-primary' />
 									Best Practices
 								</div>
 								<div
-									className='text-sm hover:bg-muted p-2 rounded cursor-pointer flex items-center text-foreground transition-colors'
+									className='text-sm hover:bg-muted p-2 rounded cursor-pointer flex items-center text-foreground transition-colors shadow-sm'
 									onClick={() => handlePromptClick("Show me examples of successful agent implementations")}
 								>
 									<Star className='w-4 h-4 mr-2 text-primary' />
@@ -236,7 +266,7 @@ export default function AllInOneAIPage() {
 					</div>
 				</div>
 
-				<div className='p-4 border-t border-border'>
+				<div className='p-4 shadow-lg bg-card'>
 					<Button
 						variant='ghost'
 						className='w-full justify-start text-muted-foreground hover:text-foreground'
@@ -325,7 +355,7 @@ export default function AllInOneAIPage() {
 					)}
 
 					{/* Input Area */}
-					<div className='border-t border-border bg-background p-4'>
+					<div className='bg-background p-4'>
 						<div className='max-w-4xl mx-auto relative'>
 							<div className='bg-card rounded-2xl shadow-lg border border-border overflow-hidden flex items-center'>
 								<Input
@@ -338,7 +368,7 @@ export default function AllInOneAIPage() {
 								/>
 								<Button
 									size='icon'
-									className='h-12 w-12 rounded-full mr-2 bg-primary hover:bg-primary/90'
+									className='h-12 w-12 rounded-full mr-1'
 									variant='ghost'
 									onClick={() => handleSendMessage()}
 									disabled={isLoading}
