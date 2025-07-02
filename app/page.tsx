@@ -1,7 +1,26 @@
 "use client";
 
 import {useState, useRef, useEffect} from "react";
-import {Search, LogOut, ArrowRight, Send, Menu, X, Bot, Zap, Settings, HelpCircle, BookOpen, Sparkles} from "lucide-react";
+import {
+	Search,
+	LogOut,
+	ArrowRight,
+	Send,
+	Menu,
+	X,
+	Bot,
+	Zap,
+	Settings,
+	HelpCircle,
+	BookOpen,
+	Sparkles,
+	Users,
+	Lightbulb,
+	PlusCircle,
+	MessageSquare,
+	CheckCircle,
+	Star,
+} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {cn} from "@/lib/utils";
@@ -124,13 +143,14 @@ export default function AllInOneAIPage() {
 						<Search className='w-4 h-4 absolute left-3 top-3 text-muted-foreground' />
 						<Input
 							className='pl-9 bg-muted border-border'
-							placeholder='Search capabilities'
+							placeholder='Search chats'
 						/>
 					</div>
 				</div>
 
 				<div className='flex-1 overflow-auto p-4'>
 					<div className='space-y-6'>
+						{/* Quick Actions Section - now at the top */}
 						<div>
 							<div className='text-sm font-medium mb-3 flex items-center text-foreground'>
 								<Zap className='w-4 h-4 mr-2 text-primary' />
@@ -141,47 +161,45 @@ export default function AllInOneAIPage() {
 									className='text-sm hover:bg-muted p-2 rounded cursor-pointer flex items-center text-foreground transition-colors'
 									onClick={() => handleQuickAction("Show me my available agents")}
 								>
-									<Bot className='w-4 h-4 mr-2 text-primary' />
+									<Users className='w-4 h-4 mr-2 text-primary' />
 									View My Agents
 								</div>
 								<div
 									className='text-sm hover:bg-muted p-2 rounded cursor-pointer flex items-center text-foreground transition-colors'
 									onClick={() => handleQuickAction("What tasks can I automate?")}
 								>
-									<Sparkles className='w-4 h-4 mr-2 text-primary' />
+									<Lightbulb className='w-4 h-4 mr-2 text-primary' />
 									Automation Ideas
 								</div>
 								<div
 									className='text-sm hover:bg-muted p-2 rounded cursor-pointer flex items-center text-foreground transition-colors'
 									onClick={() => handleQuickAction("How do I create a new agent?")}
 								>
-									<Settings className='w-4 h-4 mr-2 text-primary' />
+									<PlusCircle className='w-4 h-4 mr-2 text-primary' />
 									Create Agent
 								</div>
 							</div>
 						</div>
 
+						{/* Chat History Section - now below Quick Actions */}
 						<div>
 							<div className='text-sm font-medium mb-3 flex items-center text-foreground'>
-								<BookOpen className='w-4 h-4 mr-2 text-primary' />
-								Capabilities
+								<MessageSquare className='w-4 h-4 mr-2 text-primary' />
+								Chat History
 							</div>
-							<div className='space-y-2'>
-								<div className='text-sm p-2 rounded bg-muted border border-border'>
-									<p className='font-medium text-foreground'>Task Automation</p>
-									<p className='text-xs text-muted-foreground'>Create workflows and automate repetitive tasks</p>
+							<div className='space-y-1'>
+								{/* Example chat history items - no icons */}
+								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors'>
+									<span className='truncate'>How to create an AI agent</span>
 								</div>
-								<div className='text-sm p-2 rounded bg-muted border border-border'>
-									<p className='font-medium text-foreground'>Agent Management</p>
-									<p className='text-xs text-muted-foreground'>Create, customize, and manage your AI agents</p>
+								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors'>
+									<span className='truncate'>Automation ideas for business</span>
 								</div>
-								<div className='text-sm p-2 rounded bg-muted border border-border'>
-									<p className='font-medium text-foreground'>Integration</p>
-									<p className='text-xs text-muted-foreground'>Connect with external tools and services</p>
+								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors'>
+									<span className='truncate'>Best practices for agents</span>
 								</div>
-								<div className='text-sm p-2 rounded bg-muted border border-border'>
-									<p className='font-medium text-foreground'>Learning & Adaptation</p>
-									<p className='text-xs text-muted-foreground'>Agents that improve with use</p>
+								<div className='p-2 rounded-lg hover:bg-muted cursor-pointer text-sm text-foreground transition-colors'>
+									<span className='truncate'>Customer service automation</span>
 								</div>
 							</div>
 						</div>
@@ -193,21 +211,24 @@ export default function AllInOneAIPage() {
 							</div>
 							<div className='space-y-2'>
 								<div
-									className='text-sm hover:bg-muted p-2 rounded cursor-pointer text-foreground transition-colors'
+									className='text-sm hover:bg-muted p-2 rounded cursor-pointer flex items-center text-foreground transition-colors'
 									onClick={() => handlePromptClick("How do I get started with All In One AI?")}
 								>
+									<BookOpen className='w-4 h-4 mr-2 text-primary' />
 									Getting Started Guide
 								</div>
 								<div
-									className='text-sm hover:bg-muted p-2 rounded cursor-pointer text-foreground transition-colors'
+									className='text-sm hover:bg-muted p-2 rounded cursor-pointer flex items-center text-foreground transition-colors'
 									onClick={() => handlePromptClick("What are the best practices for creating effective agents?")}
 								>
+									<CheckCircle className='w-4 h-4 mr-2 text-primary' />
 									Best Practices
 								</div>
 								<div
-									className='text-sm hover:bg-muted p-2 rounded cursor-pointer text-foreground transition-colors'
+									className='text-sm hover:bg-muted p-2 rounded cursor-pointer flex items-center text-foreground transition-colors'
 									onClick={() => handlePromptClick("Show me examples of successful agent implementations")}
 								>
+									<Star className='w-4 h-4 mr-2 text-primary' />
 									Success Stories
 								</div>
 							</div>
@@ -324,7 +345,7 @@ export default function AllInOneAIPage() {
 								>
 									<Send
 										className='w-5 h-5 text-primary-foreground'
-										strokeWidth={2}
+										strokeWidth={2.5}
 									/>
 								</Button>
 							</div>

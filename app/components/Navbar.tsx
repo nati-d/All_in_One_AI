@@ -84,7 +84,7 @@ export default function Navbar() {
 							<span className='sr-only'>Open main menu</span>
 							{/* Hamburger Icon */}
 							<svg
-								className={`${isMenuOpen ? "hidden" : "block"} h-6 w-6`}
+								className={`${isMenuOpen ? "hidden" : "block"} h-6 w-6 text-primary`}
 								xmlns='http://www.w3.org/2000/svg'
 								fill='none'
 								viewBox='0 0 24 24'
@@ -100,7 +100,7 @@ export default function Navbar() {
 							</svg>
 							{/* Close Icon */}
 							<svg
-								className={`${isMenuOpen ? "block" : "hidden"} h-6 w-6`}
+								className={`${isMenuOpen ? "block" : "hidden"} h-6 w-6 text-primary`}
 								xmlns='http://www.w3.org/2000/svg'
 								fill='none'
 								viewBox='0 0 24 24'
