@@ -3,35 +3,33 @@
 import {useState} from "react";
 import Link from "next/link";
 import {useRouter} from "next/navigation";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
 import apiClient from "../lib/axiosConfig";
 import {useAuth} from "../contexts/AuthContext";
+import {loginSchema, type LoginFormData} from "../lib/validations/auth";
+import {Form, FormField, FormLabel, FormInput, FormError, FormButton} from "../components/ui/form";
 
 export default function LoginPage() {
-	const [formData, setFormData] = useState({
-		email: "",
-		password: "",
-	});
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState("");
 	const router = useRouter();
 	const {login} = useAuth();
 
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const {name, value} = e.target;
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-		}));
-		setError(""); // Clear error when user starts typing
-	};
+	const form = useForm<LoginFormData>({
+		resolver: zodResolver(loginSchema),
+		defaultValues: {
+			email: "",
+			password: "",
+		},
+	});
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
+	const onSubmit = async (data: LoginFormData) => {
 		setIsLoading(true);
 		setError("");
 
 		try {
-			const response = await apiClient.post("/auth/login", formData);
+			const response = await apiClient.post("/auth/login", data);
 
 			if (response.data.token) {
 				login(response.data.token, response.data.user);
@@ -65,51 +63,32 @@ export default function LoginPage() {
 
 				{/* Form */}
 				<div className='bg-card border border-border rounded-2xl p-8 shadow-xl'>
-					<form
-						onSubmit={handleSubmit}
-						className='space-y-6'
-					>
+					<Form onSubmit={form.handleSubmit(onSubmit)}>
 						{/* Email Field */}
-						<div>
-							<label
-								htmlFor='email'
-								className='block text-sm font-medium text-foreground mb-2'
-							>
-								Email address
-							</label>
-							<input
+						<FormField>
+							<FormLabel htmlFor='email'>Email address</FormLabel>
+							<FormInput
 								id='email'
-								name='email'
 								type='email'
 								autoComplete='email'
-								required
-								value={formData.email}
-								onChange={handleInputChange}
-								className='w-full px-4 py-3 bg-input border border-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200'
 								placeholder='Enter your email'
+								{...form.register("email")}
 							/>
-						</div>
+							{form.formState.errors.email && <FormError>{form.formState.errors.email.message}</FormError>}
+						</FormField>
 
 						{/* Password Field */}
-						<div>
-							<label
-								htmlFor='password'
-								className='block text-sm font-medium text-foreground mb-2'
-							>
-								Password
-							</label>
-							<input
+						<FormField>
+							<FormLabel htmlFor='password'>Password</FormLabel>
+							<FormInput
 								id='password'
-								name='password'
 								type='password'
 								autoComplete='current-password'
-								required
-								value={formData.password}
-								onChange={handleInputChange}
-								className='w-full px-4 py-3 bg-input border border-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200'
 								placeholder='Enter your password'
+								{...form.register("password")}
 							/>
-						</div>
+							{form.formState.errors.password && <FormError>{form.formState.errors.password.message}</FormError>}
+						</FormField>
 
 						{/* Error Message */}
 						{error && (
@@ -119,10 +98,9 @@ export default function LoginPage() {
 						)}
 
 						{/* Submit Button */}
-						<button
+						<FormButton
 							type='submit'
 							disabled={isLoading}
-							className='w-full bg-primary hover:bg-primary/90 disabled:bg-primary/50 text-primary-foreground font-semibold py-3 px-4 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-card disabled:cursor-not-allowed'
 						>
 							{isLoading ? (
 								<div className='flex items-center justify-center space-x-2'>
@@ -132,8 +110,8 @@ export default function LoginPage() {
 							) : (
 								"Sign in"
 							)}
-						</button>
-					</form>
+						</FormButton>
+					</Form>
 
 					{/* Divider */}
 					<div className='relative my-6'>
