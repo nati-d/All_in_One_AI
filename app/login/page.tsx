@@ -49,31 +49,18 @@ export default function LoginPage() {
 		<div className='min-h-screen bg-background flex items-center justify-center px-4 sm:px-6 lg:px-8'>
 			<div className='max-w-md w-full space-y-8'>
 				{/* Header */}
-				<div className='text-center'>
+				<div className='text-center mb-8'>
 					<Link
 						href='/'
-						className='inline-flex items-center space-x-3 mb-8 group'
+						className='inline-block mb-6'
 					>
-						<div className='relative'>
-							<div className='w-12 h-12 bg-gradient-to-br from-primary to-primary/80 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105'>
-								<span className='text-primary-foreground font-bold text-2xl'>A</span>
-							</div>
-							<div className='absolute -inset-1 bg-gradient-to-r from-primary/30 to-transparent rounded-2xl blur-sm opacity-50 group-hover:opacity-70 transition-opacity duration-300'></div>
-						</div>
-						<div className='flex flex-col items-start'>
-							<span className='text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent'>
-								All In One AI
-							</span>
-							<span className='text-sm text-muted-foreground'>Your AI Assistant</span>
+						<div className='w-10 h-10 bg-primary rounded-lg flex items-center justify-center'>
+							<span className='text-primary-foreground font-bold text-lg'>A</span>
 						</div>
 					</Link>
 
-					<div className='space-y-3 mb-8'>
-						<h2 className='text-4xl font-bold bg-gradient-to-r from-foreground via-foreground/90 to-foreground/80 bg-clip-text text-transparent'>
-							Welcome back
-						</h2>
-						<p className='text-lg text-muted-foreground/80 max-w-sm mx-auto leading-relaxed'>Sign in to your account to continue your AI journey</p>
-					</div>
+					<h1 className='text-2xl font-semibold text-foreground mb-2'>Welcome back</h1>
+					<p className='text-muted-foreground'>Sign in to your account</p>
 				</div>
 
 				{/* Form */}
