@@ -6,5 +6,6 @@ export const SendQuery = async (query: string): Promise<SendQueryResponse> => {
 	const response = await apiClient.post("/api/v1/query", {
 		query: query,
 	});
+	console.log(response);
 	return response.data;
 };
