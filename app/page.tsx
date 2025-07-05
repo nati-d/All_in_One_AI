@@ -28,6 +28,8 @@ import {cn, formatTimestamp} from "@/lib/utils";
 import {SendQuery} from "@/app/api/query";
 import type {SendQueryResponse} from "@/app/types/query";
 import ProtectedRoute from "./components/ProtectedRoute";
+import {useAuth} from "./contexts/AuthContext";
+import {useRouter} from "next/navigation";
 
 interface Message {
 	sender: "user" | "assistant";
@@ -49,6 +51,8 @@ export default function AllInOneAIPage() {
 	const [error, setError] = useState<string | null>(null);
 	const [isConnected, setIsConnected] = useState(true);
 	const messagesEndRef = useRef<HTMLDivElement>(null);
+	const {user, logout} = useAuth();
+	const router = useRouter();
 
 	// Scroll to bottom of messages when new messages are added
 	useEffect(() => {
@@ -81,24 +85,47 @@ export default function AllInOneAIPage() {
 					llm_used: response.llm_used,
 				},
 			]);
-		} catch (error) {
+		} catch (error: any) {
 			console.error("Error sending message:", error);
-			setError("Failed to connect to AI service. Using fallback response.");
-			setIsConnected(false);
 
-			// Fallback to static response if API fails
-			const fallbackResponse = getStaticResponse(textToSend);
+			// Extract error message from backend response
+			let errorMessage = "An error occurred while processing your request.";
+
+			if (error.response?.data?.detail) {
+				// Extract msg from detail array
+				const details = error.response.data.detail;
+				if (Array.isArray(details) && details.length > 0) {
+					// Get all msg values from the detail array
+					const messages = details.map((detail: any) => detail.msg).filter(Boolean);
+					errorMessage = messages.join(", ");
+				} else if (typeof details === "string") {
+					errorMessage = details;
+				}
+			} else if (error.response?.data?.message) {
+				// Backend returned a specific error message
+				errorMessage = error.response.data.message;
+			} else if (error.response?.data) {
+				// Use the entire response data if no specific message field
+				errorMessage = JSON.stringify(error.response.data, null, 2);
+			} else if (error.message) {
+				// Network or other error
+				errorMessage = error.message;
+			}
+
+			setError(errorMessage);
+
+			// Add error message to chat as assistant message
 			setMessages((prev) => [
 				...prev,
 				{
 					sender: "assistant",
-					text: fallbackResponse,
+					text: `${errorMessage}`,
 					timestamp: new Date(),
 				},
 			]);
 
-			// Clear error after 5 seconds
-			setTimeout(() => setError(null), 5000);
+			// Clear error after 8 seconds
+			setTimeout(() => setError(null), 8000);
 		} finally {
 			setIsLoading(false);
 		}
@@ -113,6 +140,12 @@ export default function AllInOneAIPage() {
 	// Handle quick action clicks
 	const handleQuickAction = (action: string) => {
 		handleSendMessage(action);
+	};
+
+	// Handle logout
+	const handleLogout = () => {
+		logout();
+		router.push("/login");
 	};
 
 	return (
@@ -270,15 +303,15 @@ export default function AllInOneAIPage() {
 							{/* Avatar */}
 							<div className='relative'>
 								<div className='w-10 h-10 bg-gradient-to-br from-primary to-primary/70 rounded-full flex items-center justify-center shadow-lg'>
-									<span className='text-primary-foreground font-semibold text-sm'>JD</span>
+									<span className='text-primary-foreground font-semibold text-sm'>{user?.display_name?.charAt(0)?.toUpperCase() || "U"}</span>
 								</div>
 								<div className='absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-card'></div>
 							</div>
 
 							{/* User Info */}
 							<div className='flex-1 min-w-0'>
-								<p className='text-sm font-medium text-foreground truncate'>Abebe Kebede</p>
-								<p className='text-xs text-muted-foreground truncate'>abebe.kebede@example.com</p>
+								<p className='text-sm font-medium text-foreground truncate'>{user?.display_name || "User"}</p>
+								<p className='text-xs text-muted-foreground truncate'>{user?.email || "user@example.com"}</p>
 							</div>
 
 							{/* Logout Button */}
@@ -286,6 +319,8 @@ export default function AllInOneAIPage() {
 								variant='ghost'
 								size='icon'
 								className='h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-foreground'
+								onClick={handleLogout}
+								title='Logout'
 							>
 								<LogOut className='w-4 h-4' />
 							</Button>
@@ -343,7 +378,20 @@ export default function AllInOneAIPage() {
 
 					<div className='flex-1 flex flex-col min-h-0'>
 						{/* Error Notification */}
-						{error && <div className='bg-destructive/10 border border-destructive/20 text-destructive px-4 py-2 text-sm text-center'>{error}</div>}
+						{error && (
+							<div className='bg-destructive/10 border-l-4 border-destructive text-destructive px-4 py-3 text-sm flex items-center justify-between'>
+								<div className='flex items-center space-x-2'>
+									<span className='text-destructive'>⚠️</span>
+									<span>{error}</span>
+								</div>
+								<button
+									onClick={() => setError(null)}
+									className='text-destructive hover:text-destructive/80 transition-colors'
+								>
+									<X className='w-4 h-4' />
+								</button>
+							</div>
+						)}
 
 						{/* Chat Messages or Welcome Content */}
 						{messages.length === 0 ? (

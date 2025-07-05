@@ -5,10 +5,10 @@ import Link from "next/link";
 import {useRouter} from "next/navigation";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import apiClient from "../lib/axiosConfig";
 import {useAuth} from "../contexts/AuthContext";
 import {loginSchema, type LoginFormData} from "../lib/validations/auth";
 import {Form, FormField, FormLabel, FormInput, FormError, FormButton} from "../components/ui/form";
+import {loginUser} from "../api/auth";
 
 export default function LoginPage() {
 	const [isLoading, setIsLoading] = useState(false);
@@ -19,8 +19,8 @@ export default function LoginPage() {
 	const form = useForm<LoginFormData>({
 		resolver: zodResolver(loginSchema),
 		defaultValues: {
-			email: "demo@example.com",
-			password: "Demo123!",
+			email: "",
+			password: "",
 		},
 	});
 
@@ -28,43 +28,40 @@ export default function LoginPage() {
 		setIsLoading(true);
 		setError("");
 
-		// Demo mode - default credentials until backend is ready
-		const DEMO_CREDENTIALS = {
-			email: "demo@example.com",
-			password: "Demo123!",
-		};
-
-		// Check if using demo credentials
-		if (data.email === DEMO_CREDENTIALS.email && data.password === DEMO_CREDENTIALS.password) {
-			// Simulate API delay
-			await new Promise((resolve) => setTimeout(resolve, 1000));
-
-			// Create demo user data
-			const demoUser = {
-				id: "demo-user-123",
-				email: DEMO_CREDENTIALS.email,
-				fullName: "Demo User",
-			};
-
-			// Use a demo token
-			const demoToken = "demo-token-" + Date.now();
-
-			login(demoToken, demoUser);
-			router.push("/");
-			return;
-		}
-
-		// If not demo credentials, try API call (will fail until backend is ready)
 		try {
-			const response = await apiClient.post("/auth/login", data);
+			const response = await loginUser(data);
 
-			if (response.data.token) {
-				login(response.data.token, response.data.user);
+			if (response.token) {
+				login(response.token, response.user);
 				router.push("/");
+			} else {
+				setError("Invalid response from server. Please try again.");
 			}
 		} catch (err: any) {
 			console.error("Login error:", err);
-			setError("Login failed. Please use demo credentials: demo@example.com / Demo123!");
+
+			// Extract error message from backend response
+			let errorMessage = "Login failed. Please check your credentials and try again.";
+
+			if (err.response?.data?.detail) {
+				// Extract msg from detail array
+				const details = err.response.data.detail;
+				if (Array.isArray(details) && details.length > 0) {
+					// Get all msg values from the detail array
+					const messages = details.map((detail: any) => detail.msg).filter(Boolean);
+					errorMessage = messages.join(", ");
+				} else if (typeof details === "string") {
+					errorMessage = details;
+				}
+			} else if (err.response?.data?.message) {
+				errorMessage = err.response.data.message;
+			} else if (err.response?.data) {
+				errorMessage = JSON.stringify(err.response.data, null, 2);
+			} else if (err.message) {
+				errorMessage = err.message;
+			}
+
+			setError(errorMessage);
 		} finally {
 			setIsLoading(false);
 		}
@@ -86,13 +83,6 @@ export default function LoginPage() {
 
 					<h1 className='text-2xl font-semibold text-foreground mb-2'>Welcome back</h1>
 					<p className='text-muted-foreground'>Sign in to your account</p>
-
-					{/* Demo credentials notice */}
-					<div className='mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg'>
-						<p className='text-blue-800 text-sm'>
-							<strong>Demo Mode:</strong> Use demo@example.com / Demo123!
-						</p>
-					</div>
 				</div>
 
 				{/* Form */}

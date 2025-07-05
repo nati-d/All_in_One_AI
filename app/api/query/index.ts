@@ -3,9 +3,14 @@ import apiClient from "../../lib/axiosConfig";
 import type {SendQueryResponse} from "../../types/query";
 
 export const SendQuery = async (query: string): Promise<SendQueryResponse> => {
-	const response = await apiClient.post("/api/v1/query", {
-		query: query,
-	});
-	console.log(response);
-	return response.data;
+	try {
+		const response = await apiClient.post("/api/v1/query", {
+			query: query,
+		});
+		console.log("Query response:", response.data);
+		return response.data;
+	} catch (error: any) {
+		console.error("SendQuery error:", error);
+		throw error;
+	}
 };

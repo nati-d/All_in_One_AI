@@ -5,10 +5,10 @@ import Link from "next/link";
 import {useRouter} from "next/navigation";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import apiClient from "../lib/axiosConfig";
 import {useAuth} from "../contexts/AuthContext";
 import {signupSchema, type SignupFormData} from "../lib/validations/auth";
 import {Form, FormField, FormLabel, FormInput, FormError, FormButton} from "../components/ui/form";
+import {registerUser} from "../api/auth";
 
 export default function SignupPage() {
 	const [isLoading, setIsLoading] = useState(false);
@@ -19,7 +19,7 @@ export default function SignupPage() {
 	const form = useForm<SignupFormData>({
 		resolver: zodResolver(signupSchema),
 		defaultValues: {
-			fullName: "",
+			display_name: "",
 			email: "",
 			password: "",
 		},
@@ -30,15 +30,39 @@ export default function SignupPage() {
 		setError("");
 
 		try {
-			const response = await apiClient.post("/auth/signup", data);
+			const response = await registerUser(data);
 
-			if (response.data.token) {
-				login(response.data.token, response.data.user);
+			if (response.token) {
+				login(response.token, response.user);
 				router.push("/");
+			} else {
+				setError("Invalid response from server. Please try again.");
 			}
 		} catch (err: any) {
 			console.error("Signup error:", err);
-			setError(err.response?.data?.message || "Signup failed. Please try again.");
+
+			// Extract error message from backend response
+			let errorMessage = "Signup failed. Please try again.";
+
+			if (err.response?.data?.detail) {
+				// Extract msg from detail array
+				const details = err.response.data.detail;
+				if (Array.isArray(details) && details.length > 0) {
+					// Get all msg values from the detail array
+					const messages = details.map((detail: any) => detail.msg).filter(Boolean);
+					errorMessage = messages.join(", ");
+				} else if (typeof details === "string") {
+					errorMessage = details;
+				}
+			} else if (err.response?.data?.message) {
+				errorMessage = err.response.data.message;
+			} else if (err.response?.data) {
+				errorMessage = JSON.stringify(err.response.data, null, 2);
+			} else if (err.message) {
+				errorMessage = err.message;
+			}
+
+			setError(errorMessage);
 		} finally {
 			setIsLoading(false);
 		}
@@ -65,17 +89,17 @@ export default function SignupPage() {
 				{/* Form */}
 				<div className='bg-card border border-border rounded-2xl p-8 shadow-xl'>
 					<Form onSubmit={form.handleSubmit(onSubmit)}>
-						{/* Full Name Field */}
+						{/* Display Name Field */}
 						<FormField>
-							<FormLabel htmlFor='fullName'>Full name</FormLabel>
+							<FormLabel htmlFor='display_name'>Display name</FormLabel>
 							<FormInput
-								id='fullName'
+								id='display_name'
 								type='text'
 								autoComplete='name'
-								placeholder='Enter your full name'
-								{...form.register("fullName")}
+								placeholder='Enter your display name'
+								{...form.register("display_name")}
 							/>
-							{form.formState.errors.fullName && <FormError>{form.formState.errors.fullName.message}</FormError>}
+							{form.formState.errors.display_name && <FormError>{form.formState.errors.display_name.message}</FormError>}
 						</FormField>
 
 						{/* Email Field */}
