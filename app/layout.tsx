@@ -22,6 +22,7 @@ export const metadata: Metadata = {
 	creator: "All In One AI",
 	publisher: "All In One AI",
 	robots: "index, follow",
+	viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
 	openGraph: {
 		title: "All In One AI - Your AI Assistant",
 		description: "All In One AI is your comprehensive AI assistant for automation, task management, and intelligent workflows.",

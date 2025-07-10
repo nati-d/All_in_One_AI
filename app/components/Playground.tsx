@@ -48,23 +48,23 @@ export default function Playground() {
 	};
 
 	return (
-		<div className='min-h-screen bg-background flex flex-col'>
+		<div className='min-h-screen  flex flex-col'>
 			<div
-				className='flex flex-1 w-full max-w-full px-4 gap-4'
+				className='flex flex-col lg:flex-row flex-1 w-full max-w-full p-4 hidden  px-2 sm:px-4 gap-2 sm:gap-4'
 				style={{height: "calc(100vh - 2rem)"}}
 			>
 				{/* Left: Chat Area */}
-				<div className='flex flex-col flex-1 rounded-xl border border-border/10 bg-background/80 overflow-hidden'>
+				<div className='flex flex-col flex-1 rounded-xl border border-border/10 bg-background/80 overflow-hidden w-full'>
 					{/* Top: Model Selector */}
-					<div className='flex items-center h-14 px-6 border-b border-border/10'>
+					<div className='flex items-center h-12 sm:h-14 px-3 sm:px-6 border-b border-border/10'>
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
 								<Button
 									variant='ghost'
-									className='text-base font-semibold px-0 text-foreground bg-transparent hover:bg-primary/20 focus:bg-primary/20 transition-colors'
+									className='text-sm sm:text-base font-semibold px-0 text-foreground bg-transparent hover:bg-primary/20 focus:bg-primary/20 transition-colors'
 								>
 									{selectedModel}
-									<ChevronDown className='ml-2 h-5 w-5' />
+									<ChevronDown className='ml-1 sm:ml-2 h-4 w-4 sm:h-5 sm:w-5' />
 								</Button>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent className='bg-background border-border mt-2'>
@@ -72,7 +72,7 @@ export default function Playground() {
 									<DropdownMenuItem
 										key={model}
 										onClick={() => setSelectedModel(model)}
-										className='text-base text-foreground hover:bg-primary/20 focus:bg-primary/30 transition-colors'
+										className='text-sm sm:text-base text-foreground hover:bg-primary/20 focus:bg-primary/30 transition-colors'
 									>
 										{model}
 									</DropdownMenuItem>
@@ -82,14 +82,14 @@ export default function Playground() {
 					</div>
 
 					{/* Chat Messages */}
-					<div className='flex-1 flex flex-col justify-end overflow-y-auto px-6 py-4 gap-4'>
-						{messages.length === 0 && <div className='text-center text-muted-foreground text-base'>No messages yet. Start the conversation!</div>}
+					<div className='flex-1 flex flex-col justify-end hidden overflow-y-auto px-3 sm:px-6 py-3 sm:py-4 gap-3 sm:gap-4'>
+						{messages.length === 0 && <div className='text-center text-muted-foreground text-sm sm:text-base'>No messages yet. Start the conversation!</div>}
 						{messages.map((msg, idx) => (
 							<div
 								key={msg.id}
 								className='flex flex-col gap-1'
 							>
-								<div className={`text-sm ${msg.role === "user" ? "text-primary-foreground text-right" : "text-foreground text-left"}`}>
+								<div className={`text-xs sm:text-sm ${msg.role === "user" ? "text-primary-foreground text-right" : "text-foreground text-left"}`}>
 									{msg.role === "assistant" 
 										? parseAIResponse(msg.content)
 										: msg.content
@@ -104,26 +104,26 @@ export default function Playground() {
 
 					{/* Bottom: Message Input */}
 					<form
-						className='w-full px-4 pb-4 pt-2'
+						className='w-full px-3 sm:px-4 pb-3 sm:pb-4 pt-2'
 						onSubmit={(e) => {
 							e.preventDefault();
 							handleSendMessage();
 						}}
 					>
-						<div className='flex items-end gap-2 bg-secondary rounded-2xl p-4 border border-border/10'>
+						<div className='flex items-end gap-2 bg-secondary rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-border/10'>
 							<Button
 								type='button'
 								variant='ghost'
 								size='icon'
 								className='text-foreground/70'
 							>
-								<Paperclip className='h-5 w-5' />
+								<Paperclip className='h-4 w-4 sm:h-5 sm:w-5' />
 							</Button>
 							<Textarea
 								value={message}
 								onChange={(e) => setMessage(e.target.value)}
 								placeholder='Message to All In One AI'
-								className='flex-1 resize-none bg-transparent text-foreground placeholder:text-foreground/60 min-h-[32px] max-h-32 outline-none border-none ring-0 shadow-none focus:outline-none focus:border-none focus:ring-0'
+								className='flex-1 resize-none bg-transparent text-foreground placeholder:text-foreground/60 min-h-[32px] max-h-32 outline-none border-none ring-0 shadow-none focus:outline-none focus:border-none focus:ring-0 text-sm sm:text-base'
 								onKeyDown={(e) => {
 									if (e.key === "Enter" && !e.shiftKey) {
 										e.preventDefault();
@@ -133,28 +133,28 @@ export default function Playground() {
 							/>
 							<Button
 								type='submit'
-								className='rounded-full bg-primary hover:bg-primary/90 text-primary-foreground p-2 h-10 w-10 flex items-center justify-center shadow-none'
+								className='rounded-full bg-primary hover:bg-primary/90 text-primary-foreground p-2 h-8 w-8 sm:h-10 sm:w-10 flex items-center justify-center shadow-none'
 								disabled={!message.trim()}
 							>
-								<Send className='h-5 w-5' />
+								<Send className='h-4 w-4 sm:h-5 sm:w-5' />
 							</Button>
 						</div>
 					</form>
 				</div>
 
 				{/* Right: Sidebar */}
-				<div className='w-[340px] flex flex-col gap-4 rounded-xl border border-border/10 bg-background/80 p-4'>
+				<div className='w-full lg:w-[340px] flex flex-col gap-3 sm:gap-4 rounded-xl border border-border/10 bg-background/80 p-3 sm:p-4'>
 					{/* System Prompt */}
 					<Card className='bg-background/80 border border-border/10 rounded-xl'>
 						<CardHeader className='pb-2'>
-							<CardTitle className='text-base text-foreground'>System Prompt</CardTitle>
+							<CardTitle className='text-sm sm:text-base text-foreground'>System Prompt</CardTitle>
 						</CardHeader>
 						<CardContent>
 							<Textarea
 								value={systemPrompt}
 								onChange={(e) => setSystemPrompt(e.target.value)}
 								placeholder='Enter a system instruction'
-								className='resize-none border border-border/10 bg-background text-foreground placeholder:text-muted-foreground rounded-lg min-h-[60px]'
+								className='resize-none border border-border/10 bg-background text-foreground placeholder:text-muted-foreground rounded-lg min-h-[60px] text-sm sm:text-base'
 							/>
 						</CardContent>
 					</Card>
@@ -163,10 +163,10 @@ export default function Playground() {
 					<div className='flex-1' />
 
 					{/* Temperature Slider */}
-					<div className='flex flex-col gap-2 rounded-xl border border-border/10 bg-background/80 p-4'>
+					<div className='flex flex-col gap-2 rounded-xl border border-border/10 bg-background/80 p-3 sm:p-4'>
 						<div className='flex items-center justify-between'>
-							<span className='text-sm text-foreground'>Temperature</span>
-							<span className='text-sm text-foreground'>{temperature[0]}</span>
+							<span className='text-xs sm:text-sm text-foreground'>Temperature</span>
+							<span className='text-xs sm:text-sm text-foreground'>{temperature[0]}</span>
 						</div>
 						<Slider
 							value={temperature}

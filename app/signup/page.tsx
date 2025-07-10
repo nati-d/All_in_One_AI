@@ -69,25 +69,25 @@ export default function SignupPage() {
 	};
 
 	return (
-		<div className='min-h-screen bg-background flex items-center justify-center px-4 sm:px-6 lg:px-8'>
-			<div className='max-w-md w-full space-y-8'>
+		<div className='min-h-screen bg-background flex items-center justify-center px-3 sm:px-4 md:px-6 lg:px-8'>
+			<div className='max-w-sm sm:max-w-md w-full space-y-6 sm:space-y-8'>
 				{/* Header */}
-				<div className='text-center mb-8'>
+				<div className='text-center mb-6 sm:mb-8'>
 					<Link
 						href='/'
-						className='inline-block mb-6'
+						className='inline-block mb-4 sm:mb-6'
 					>
-						<div className='w-10 h-10 bg-primary rounded-lg flex items-center justify-center'>
-							<span className='text-primary-foreground font-bold text-lg'>A</span>
+						<div className='w-8 h-8 sm:w-10 sm:h-10 bg-primary rounded-lg flex items-center justify-center'>
+							<span className='text-primary-foreground font-bold text-base sm:text-lg'>A</span>
 						</div>
 					</Link>
 
-					<h1 className='text-2xl font-semibold text-foreground mb-2'>Create your account</h1>
-					<p className='text-muted-foreground'>Get started with All In One AI</p>
+					<h1 className='text-xl sm:text-2xl font-semibold text-foreground mb-2'>Create your account</h1>
+					<p className='text-sm sm:text-base text-muted-foreground'>Get started with All In One AI</p>
 				</div>
 
 				{/* Form */}
-				<div className='bg-card border border-border rounded-2xl p-8 shadow-xl'>
+				<div className='bg-card border border-border rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-xl'>
 					<Form onSubmit={form.handleSubmit(onSubmit)}>
 						{/* Display Name Field */}
 						<FormField>
@@ -126,7 +126,7 @@ export default function SignupPage() {
 								{...form.register("password")}
 							/>
 							{form.formState.errors.password && <FormError>{form.formState.errors.password.message}</FormError>}
-							<p className='text-xs text-muted-foreground mt-2'>
+							<p className='text-xs text-muted-foreground mt-1.5 sm:mt-2'>
 								Password must contain at least one uppercase letter, one lowercase letter, and one number
 							</p>
 						</FormField>
@@ -155,18 +155,18 @@ export default function SignupPage() {
 					</Form>
 
 					{/* Divider */}
-					<div className='relative my-6'>
+					<div className='relative my-4 sm:my-6'>
 						<div className='absolute inset-0 flex items-center'>
 							<div className='w-full border-t border-border'></div>
 						</div>
-						<div className='relative flex justify-center text-sm'>
+						<div className='relative flex justify-center text-xs sm:text-sm'>
 							<span className='px-2 bg-card text-muted-foreground'>or</span>
 						</div>
 					</div>
 
 					{/* Sign In Link */}
 					<div className='text-center'>
-						<p className='text-muted-foreground text-sm'>
+						<p className='text-muted-foreground text-xs sm:text-sm'>
 							Already have an account?{" "}
 							<Link
 								href='/login'
