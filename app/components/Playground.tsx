@@ -1,6 +1,7 @@
 "use client";
 
 import {useState} from "react";
+import {parseAIResponse} from "./AIResponseFormatter";
 import {Button} from "@/components/ui/button";
 import {Textarea} from "@/components/ui/textarea";
 import {Slider} from "@/components/ui/slider";
@@ -89,7 +90,10 @@ export default function Playground() {
 								className='flex flex-col gap-1'
 							>
 								<div className={`text-sm ${msg.role === "user" ? "text-primary-foreground text-right" : "text-foreground text-left"}`}>
-									{msg.content}
+									{msg.role === "assistant" 
+										? parseAIResponse(msg.content)
+										: msg.content
+									}
 								</div>
 								<div className={`text-xs text-muted-foreground ${msg.role === "user" ? "text-right" : "text-left"}`}>
 									{msg.timestamp.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"})}

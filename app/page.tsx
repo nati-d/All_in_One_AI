@@ -25,6 +25,7 @@ import {
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {cn, formatTimestamp} from "@/lib/utils";
+import {parseAIResponse} from "@/app/components/AIResponseFormatter";
 import {SendQuery} from "@/app/api/query";
 import type {SendQueryResponse} from "@/app/types/query";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -424,7 +425,7 @@ export default function AllInOneAIPage() {
 							</div>
 						) : (
 							<div className='flex-1 overflow-auto'>
-								<div className='max-w-4xl mx-auto py-8 px-4 space-y-6'>
+								<div className='max-w-4xl mx-auto py-4 sm:py-8 px-2 sm:px-4 space-y-4 sm:space-y-6'>
 									{messages.map((message, index) => (
 										<div
 											key={index}
@@ -432,11 +433,16 @@ export default function AllInOneAIPage() {
 										>
 											<div
 												className={cn(
-													"max-w-[85%] p-4 rounded-2xl",
+													"max-w-[90%] sm:max-w-[85%] p-3 sm:p-4 rounded-xl sm:rounded-2xl",
 													message.sender === "user" ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
 												)}
 											>
-												<p className='whitespace-pre-wrap leading-relaxed'>{message.text}</p>
+												<div className='whitespace-pre-wrap leading-relaxed'>
+													{message.sender === "assistant" 
+														? parseAIResponse(message.text)
+														: message.text
+													}
+												</div>
 												<div
 													className={cn(
 														"flex items-center justify-between mt-2 text-xs opacity-70",
@@ -456,14 +462,14 @@ export default function AllInOneAIPage() {
 									))}
 									{isLoading && (
 										<div className='flex justify-start'>
-											<div className='max-w-[85%] p-4 rounded-2xl bg-muted'>
-												<div className='flex items-center space-x-3'>
-													<div className='flex space-x-2'>
-														<div className='w-2 h-2 bg-muted-foreground rounded-full animate-bounce' />
-														<div className='w-2 h-2 bg-muted-foreground rounded-full animate-bounce delay-100' />
-														<div className='w-2 h-2 bg-muted-foreground rounded-full animate-bounce delay-200' />
+											<div className='max-w-[90%] sm:max-w-[85%] p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-muted'>
+												<div className='flex items-center space-x-2 sm:space-x-3'>
+													<div className='flex space-x-1 sm:space-x-2'>
+														<div className='w-1.5 h-1.5 sm:w-2 sm:h-2 bg-muted-foreground rounded-full animate-bounce' />
+														<div className='w-1.5 h-1.5 sm:w-2 sm:h-2 bg-muted-foreground rounded-full animate-bounce delay-100' />
+														<div className='w-1.5 h-1.5 sm:w-2 sm:h-2 bg-muted-foreground rounded-full animate-bounce delay-200' />
 													</div>
-													<span className='text-sm text-muted-foreground'>All In One AI is thinking...</span>
+													<span className='text-xs sm:text-sm text-muted-foreground'>All In One AI is thinking...</span>
 												</div>
 											</div>
 										</div>
@@ -474,11 +480,11 @@ export default function AllInOneAIPage() {
 						)}
 
 						{/* Input Area */}
-						<div className='bg-background p-4'>
+						<div className='bg-background p-2 sm:p-4'>
 							<div className='max-w-4xl mx-auto relative'>
-								<div className='bg-card rounded-2xl shadow-lg border border-border overflow-hidden flex items-center p-2'>
+								<div className='bg-card rounded-xl sm:rounded-2xl shadow-lg border border-border overflow-hidden flex items-center p-1.5 sm:p-2'>
 									<Input
-										className='border-none bg-transparent py-4 px-6 flex-grow focus:ring-0 focus:outline-none text-foreground placeholder:text-muted-foreground'
+										className='border-none bg-transparent py-3 sm:py-4 px-3 sm:px-6 flex-grow focus:ring-0 focus:outline-none text-foreground placeholder:text-muted-foreground text-sm sm:text-base'
 										placeholder='Message All In One AI...'
 										value={input}
 										onChange={(e) => setInput(e.target.value)}
@@ -487,23 +493,23 @@ export default function AllInOneAIPage() {
 									/>
 									<Button
 										size='icon'
-										className='h-10 w-10 rounded-full mr-2 bg-transparent hover:bg-muted'
+										className='h-8 w-8 sm:h-10 sm:w-10 rounded-full mr-1 sm:mr-2 bg-transparent hover:bg-muted'
 										variant='ghost'
 										onClick={() => {
 											// File sharing functionality
 										}}
 									>
-										<Paperclip className='w-5 h-5 text-muted-foreground hover:text-foreground' />
+										<Paperclip className='w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground hover:text-foreground' />
 									</Button>
 									<Button
 										size='icon'
-										className='h-12 w-12 rounded-full mr-1 bg-primary hover:bg-primary/90 active:bg-primary/80 disabled:bg-muted disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200'
+										className='h-10 w-10 sm:h-12 sm:w-12 rounded-full mr-0.5 sm:mr-1 bg-primary hover:bg-primary/90 active:bg-primary/80 disabled:bg-muted disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200'
 										variant='ghost'
 										onClick={() => handleSendMessage()}
 										disabled={isLoading || !input.trim()}
 									>
 										<Send
-											className='w-5 h-5 text-primary-foreground'
+											className='w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground'
 											strokeWidth={2.5}
 										/>
 									</Button>
