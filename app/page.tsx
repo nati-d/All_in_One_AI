@@ -163,7 +163,7 @@ export default function AllInOneAIPage() {
 				{/* Sidebar - Replaced with Agent Capabilities Panel */}
 				<div
 					className={cn(
-						"fixed inset-y-0 left-0 z-30 w-72 sm:w-80 bg-card border-r border-border flex flex-col transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static",
+						"fixed inset-y-0 left-0 z-30  sm:w-60 bg-card border-r border-border flex flex-col transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static",
 						sidebarOpen ? "translate-x-0" : "-translate-x-full"
 					)}
 				>
