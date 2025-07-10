@@ -151,7 +151,7 @@ export default function AllInOneAIPage() {
 
 	return (
 		<ProtectedRoute>
-			<div className='flex h-screen bg-background overflow-hidden'>
+			<div className='flex h-full bg-background overflow-hidden'>
 				{/* Mobile Overlay */}
 				{sidebarOpen && (
 					<div
@@ -330,7 +330,7 @@ export default function AllInOneAIPage() {
 				</div>
 
 				{/* Main Content */}
-				<div className='flex-1 flex flex-col h-screen w-full'>
+				<div className='flex-1 flex flex-col h-full w-full'>
 					{/* Mobile Header */}
 					<div className='lg:hidden relative overflow-hidden'>
 						{/* Gradient Background */}
