@@ -1,7 +1,7 @@
 import axios, {AxiosInstance, InternalAxiosRequestConfig, AxiosResponse} from "axios";
 
 // API Configuration
-const API_BASE_URL = "https://all-in-one-v1-updated-619052101442.northamerica-northeast1.run.app";
+const API_BASE_URL = "https://all-in-one-v1-619052101442.northamerica-northeast1.run.app";
 const API_TIMEOUT = 30000; // 30 seconds
 
 // Create axios instance
