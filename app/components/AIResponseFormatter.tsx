@@ -275,19 +275,25 @@ function parseHeaders(text: string): React.ReactNode[] {
     
     // Determine header level
     const level = headerMatch[1].length;
-    const HeaderTag = `h${Math.min(level, 6)}` as keyof JSX.IntrinsicElements;
+    const normalizedLevel = Math.min(level, 6);
+    
+    // Create header element using React.createElement
+    const headerElement = React.createElement(
+      `h${normalizedLevel}` as keyof React.ReactHTML,
+      {
+        key: generateUniqueKey('header'),
+        className: `font-bold mb-2 mt-4 text-foreground ${
+          level === 1 ? 'text-xl sm:text-2xl' :
+          level === 2 ? 'text-lg sm:text-xl' :
+          level === 3 ? 'text-base sm:text-lg' :
+          'text-sm sm:text-base'
+        }`
+      },
+      headerMatch[2]
+    );
     
     // Add header
-    parts.push(
-      <HeaderTag key={generateUniqueKey('header')} className={`font-bold mb-2 mt-4 text-foreground ${
-        level === 1 ? 'text-xl sm:text-2xl' :
-        level === 2 ? 'text-lg sm:text-xl' :
-        level === 3 ? 'text-base sm:text-lg' :
-        'text-sm sm:text-base'
-      }`}>
-        {headerMatch[2]}
-      </HeaderTag>
-    );
+    parts.push(headerElement);
     
     lastIndex = headerMatch.index + headerMatch[0].length;
   }
