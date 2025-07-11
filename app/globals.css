@@ -117,8 +117,19 @@
 	* {
 		@apply border-border outline-ring/50;
 	}
-	body {
+	html, body {
 		@apply bg-background text-foreground;
+		height: 100vh;
+		height: 100dvh; /* Dynamic viewport height for better mobile support */
+		overflow: hidden;
+		position: fixed;
+		width: 100%;
+	}
+	
+	/* Prevent overscroll bounce on iOS */
+	body {
+		overscroll-behavior: none;
+		-webkit-overflow-scrolling: touch;
 	}
 }
 
@@ -173,6 +184,33 @@
 	textarea,
 	input {
 		font-size: 16px;
+	}
+}
+
+/* Mobile viewport optimizations */
+@media (max-width: 768px) {
+	/* Prevent pull-to-refresh */
+	html {
+		overscroll-behavior-y: none;
+	}
+	
+	/* Ensure no scrolling on mobile */
+	body {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		overflow: hidden;
+		height: 100vh;
+		height: 100dvh;
+	}
+	
+	/* Prevent address bar issues */
+	#__next {
+		height: 100vh;
+		height: 100dvh;
+		overflow: hidden;
 	}
 }
 

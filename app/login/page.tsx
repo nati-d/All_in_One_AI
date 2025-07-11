@@ -77,7 +77,7 @@ export default function LoginPage() {
 	// Show loading while checking authentication
 	if (loading) {
 		return (
-			<div className='min-h-screen bg-background flex items-center justify-center'>
+			<div className='h-[100dvh] bg-background flex items-center justify-center overflow-hidden'>
 				<div className='flex items-center space-x-2'>
 					<div className='w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin'></div>
 					<span className='text-foreground'>Loading...</span>
@@ -92,7 +92,7 @@ export default function LoginPage() {
 	}
 
 	return (
-		<div className='min-h-screen bg-background flex items-center justify-center px-3 sm:px-4 md:px-6 lg:px-8'>
+		<div className='h-[100dvh] bg-background flex items-center justify-center px-3 sm:px-4 md:px-6 lg:px-8 overflow-hidden'>
 			<div className='max-w-sm sm:max-w-md w-full space-y-6 sm:space-y-8'>
 				{/* Header */}
 				<div className='text-center mb-6 sm:mb-8'>

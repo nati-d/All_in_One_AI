@@ -51,7 +51,7 @@ export default function AllInOneAIPage() {
 
 	return (
 		<ProtectedRoute>
-			<div className='flex h-full bg-background overflow-hidden'>
+			<div className='flex h-[100dvh] bg-background overflow-hidden'>
 				{/* Mobile Overlay */}
 				{sidebarOpen && (
 					<div
@@ -68,14 +68,14 @@ export default function AllInOneAIPage() {
 				/>
 
 				{/* Main Content */}
-				<div className='flex-1 flex flex-col h-full w-full'>
+				<div className='flex-1 flex flex-col min-h-0 w-full'>
 					{/* Mobile Header */}
 					<MobileHeader
 						sidebarOpen={sidebarOpen}
 						setSidebarOpen={setSidebarOpen}
 					/>
 
-					<div className='flex-1 flex flex-col h-full'>
+					<div className='flex-1 flex flex-col min-h-0 overflow-hidden'>
 						{/* Error Notification */}
 						<ErrorNotification error={error} onClear={clearError} />
 
