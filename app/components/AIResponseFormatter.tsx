@@ -277,20 +277,39 @@ function parseHeaders(text: string): React.ReactNode[] {
     const level = headerMatch[1].length;
     const normalizedLevel = Math.min(level, 6);
     
-    // Create header element using React.createElement
-    const headerElement = React.createElement(
-      `h${normalizedLevel}` as keyof React.ReactHTML,
-      {
-        key: generateUniqueKey('header'),
-        className: `font-bold mb-2 mt-4 text-foreground ${
-          level === 1 ? 'text-xl sm:text-2xl' :
-          level === 2 ? 'text-lg sm:text-xl' :
-          level === 3 ? 'text-base sm:text-lg' :
-          'text-sm sm:text-base'
-        }`
-      },
-      headerMatch[2]
-    );
+    // Create header element with proper typing
+    const className = `font-bold mb-2 mt-4 text-foreground ${
+      level === 1 ? 'text-xl sm:text-2xl' :
+      level === 2 ? 'text-lg sm:text-xl' :
+      level === 3 ? 'text-base sm:text-lg' :
+      'text-sm sm:text-base'
+    }`;
+    
+    let headerElement: React.ReactNode;
+    
+    switch (normalizedLevel) {
+      case 1:
+        headerElement = <h1 key={generateUniqueKey('header')} className={className}>{headerMatch[2]}</h1>;
+        break;
+      case 2:
+        headerElement = <h2 key={generateUniqueKey('header')} className={className}>{headerMatch[2]}</h2>;
+        break;
+      case 3:
+        headerElement = <h3 key={generateUniqueKey('header')} className={className}>{headerMatch[2]}</h3>;
+        break;
+      case 4:
+        headerElement = <h4 key={generateUniqueKey('header')} className={className}>{headerMatch[2]}</h4>;
+        break;
+      case 5:
+        headerElement = <h5 key={generateUniqueKey('header')} className={className}>{headerMatch[2]}</h5>;
+        break;
+      case 6:
+        headerElement = <h6 key={generateUniqueKey('header')} className={className}>{headerMatch[2]}</h6>;
+        break;
+      default:
+        headerElement = <h6 key={generateUniqueKey('header')} className={className}>{headerMatch[2]}</h6>;
+        break;
+    }
     
     // Add header
     parts.push(headerElement);
