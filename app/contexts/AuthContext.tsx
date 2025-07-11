@@ -68,6 +68,7 @@ export function AuthProvider({children}: {children: ReactNode}) {
 
 		// Also listen for custom events in case the change happens in the same tab
 		const handleAuthClear = () => {
+			console.log("🔥 Auth cleared event received - logging out user");
 			setUser(null);
 			setRefreshToken(null);
 		};

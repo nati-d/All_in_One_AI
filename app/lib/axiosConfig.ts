@@ -22,10 +22,13 @@ const refreshAccessToken = async (): Promise<string> => {
 	const refreshTokenValue = localStorage.getItem("refresh_token");
 	
 	if (!refreshTokenValue) {
+		console.error("❌ No refresh token available");
 		throw new Error("No refresh token available");
 	}
 
 	try {
+		console.log("🔄 Attempting to refresh access token...");
+		
 		// Make direct axios call to avoid interceptor issues
 		const response = await axios.post(
 			`${API_BASE_URL}/api/v1/auth/refresh-token`,
@@ -38,17 +41,29 @@ const refreshAccessToken = async (): Promise<string> => {
 
 		const { token, refresh_token } = response.data;
 		
+		if (!token || !refresh_token) {
+			throw new Error("Invalid refresh response: missing tokens");
+		}
+		
 		// Update localStorage with new tokens
 		localStorage.setItem("auth_token", token);
 		localStorage.setItem("refresh_token", refresh_token);
 		
+		console.log("✅ Token refreshed successfully");
 		return token;
-	} catch (error) {
+	} catch (error: any) {
+		console.error("❌ Token refresh failed:", {
+			status: error.response?.status,
+			data: error.response?.data,
+			message: error.message
+		});
+		
 		// Clear auth data if refresh fails
 		localStorage.removeItem("auth_token");
 		localStorage.removeItem("refresh_token");
 		localStorage.removeItem("user");
 		window.dispatchEvent(new CustomEvent("auth-cleared"));
+		
 		throw error;
 	}
 };
@@ -69,13 +84,12 @@ const apiClient: AxiosInstance = axios.create({
 // Request interceptor
 apiClient.interceptors.request.use(
 	(config: InternalAxiosRequestConfig) => {
-		// Add auth token if available
+		// Always get the latest token from localStorage
 		const token = localStorage.getItem("auth_token");
 		if (token && config.headers) {
 			config.headers.Authorization = `Bearer ${token}`;
 		}
 
-		console.log(`🚀 API Request: ${config.method?.toUpperCase()} ${config.url}`);
 		return config;
 	},
 	(error) => {
@@ -87,25 +101,27 @@ apiClient.interceptors.request.use(
 // Response interceptor
 apiClient.interceptors.response.use(
 	(response: AxiosResponse) => {
-		console.log(`✅ API Response: ${response.status} ${response.config.url}`);
 		return response;
 	},
 	async (error) => {
 		const originalRequest = error.config;
-		console.error(`❌ API Error: ${error.response?.status || "Network"} ${error.config?.url}`, error);
 
 		// Handle 401 errors with token refresh
 		if (error.response?.status === 401 && !originalRequest._retry) {
+			console.log("🔐 401 Unauthorized - attempting token refresh");
+			
 			// Skip refresh for auth endpoints to avoid infinite loops
 			if (originalRequest.url?.includes('/auth/login') || 
 				originalRequest.url?.includes('/auth/register') || 
 				originalRequest.url?.includes('/auth/refresh-token')) {
+				console.log("⛔ Skipping refresh for auth endpoint");
 				return Promise.reject(error);
 			}
 
 			originalRequest._retry = true;
 
 			if (isRefreshing) {
+				console.log("⏳ Already refreshing, queuing request");
 				// If already refreshing, queue this request
 				return new Promise((resolve, reject) => {
 					failedQueue.push({resolve, reject});
@@ -130,9 +146,19 @@ apiClient.interceptors.response.use(
 					originalRequest.headers.Authorization = `Bearer ${newToken}`;
 				}
 				
+				console.log("🔄 Retrying original request with new token");
 				return apiClient(originalRequest);
 			} catch (refreshError) {
+				console.error("❌ Refresh failed, clearing queue and logging out");
 				processQueue(refreshError, null);
+				
+				// Force redirect to login if we're not already there
+				if (typeof window !== 'undefined' && !window.location.pathname.includes('/login')) {
+					setTimeout(() => {
+						window.location.href = '/login';
+					}, 1000);
+				}
+				
 				return Promise.reject(refreshError);
 			} finally {
 				isRefreshing = false;
