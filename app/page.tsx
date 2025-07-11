@@ -34,8 +34,9 @@ export default function AllInOneAIPage() {
 	};
 
 	// Handle clicking on example prompts
-	const handlePromptClick = (prompt: string) => {
-		setInput(prompt);
+	const handlePromptClick = async (prompt: string) => {
+		// Auto-send the prompt message directly
+		await sendMessage(prompt);
 	};
 
 	// Handle quick action clicks
