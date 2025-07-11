@@ -5,6 +5,7 @@ export interface LoginRequest {
 
 export interface LoginResponse {
 	token: string;
+	refresh_token: string;
 	user: {
 		id: string;
 		email: string;
@@ -20,6 +21,7 @@ export interface RegisterRequest {
 
 export interface RegisterResponse {
 	token: string;
+	refresh_token: string;
 	user: {
 		id: string;
 		email: string;

@@ -33,7 +33,7 @@ export default function SignupPage() {
 			const response = await registerUser(data);
 
 			if (response.token) {
-				login(response.token, response.user);
+				login(response.token, response.refresh_token, response.user);
 				router.push("/");
 			} else {
 				setError("Invalid response from server. Please try again.");

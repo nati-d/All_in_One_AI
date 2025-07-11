@@ -42,9 +42,14 @@ apiClient.interceptors.response.use(
 
 		// Handle specific error cases
 		if (error.response?.status === 401) {
-			// Unauthorized - redirect to login
+			// Unauthorized - clear auth data but don't redirect here
+			// Let the components handle navigation through useEffect
 			localStorage.removeItem("auth_token");
-			window.location.href = "/login";
+			localStorage.removeItem("refresh_token");
+			localStorage.removeItem("user");
+			
+			// Dispatch custom event to notify auth context
+			window.dispatchEvent(new CustomEvent("auth-cleared"));
 		}
 
 		if (error.response?.status === 403) {

@@ -32,7 +32,7 @@ export default function LoginPage() {
 			const response = await loginUser(data);
 
 			if (response.token) {
-				login(response.token, response.user);
+				login(response.token, response.refresh_token, response.user);
 				router.push("/");
 			} else {
 				setError("Invalid response from server. Please try again.");
