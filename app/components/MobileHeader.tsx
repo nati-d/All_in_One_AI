@@ -8,7 +8,7 @@ interface MobileHeaderProps {
 
 export function MobileHeader({ sidebarOpen, setSidebarOpen }: MobileHeaderProps) {
 	return (
-		<div className='lg:hidden relative overflow-hidden'>
+		<div className='lg:hidden relative overflow-hidden h-max'>
 			{/* Gradient Background */}
 			<div className='absolute inset-0 bg-gradient-to-r from-primary/10 via-secondary/20 to-primary/10'></div>
 			<div className='absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background'></div>
