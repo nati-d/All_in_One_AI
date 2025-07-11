@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { useAuth } from "../contexts/AuthContext";
 
 interface SidebarProps {
 	isOpen: boolean;
@@ -24,6 +25,8 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isOpen, onQuickAction, onLogout }: SidebarProps) {
+	const { user } = useAuth();
+	
 	return (
 		<div
 			className={cn(
@@ -118,13 +121,30 @@ export function Sidebar({ isOpen, onQuickAction, onLogout }: SidebarProps) {
 
 			{/* User Section */}
 			<div className='p-3 sm:p-4 border-t border-border'>
-				<div className='flex items-center justify-between'>
-					<div className='text-xs sm:text-sm font-medium text-foreground'>Nathnael</div>
+				<div className='flex items-center gap-2 sm:gap-3'>
+					{/* User Avatar */}
+					<div className='w-8 h-8 sm:w-10 sm:h-10 bg-primary rounded-full flex items-center justify-center shrink-0'>
+						<span className='text-primary-foreground font-medium text-xs sm:text-sm'>
+							{user?.display_name ? user.display_name.charAt(0).toUpperCase() : 'U'}
+						</span>
+					</div>
+					
+					{/* User Info */}
+					<div className='flex-1 min-w-0'>
+						<div className='text-xs sm:text-sm font-medium text-foreground truncate'>
+							{user?.display_name || 'User'}
+						</div>
+						<div className='text-xs text-muted-foreground truncate'>
+							{user?.email || ''}
+						</div>
+					</div>
+					
+					{/* Logout Button */}
 					<Button
 						variant='ghost'
 						size='sm'
 						onClick={onLogout}
-						className='text-muted-foreground hover:text-foreground p-1.5 sm:p-2'
+						className='text-muted-foreground hover:text-foreground p-1.5 sm:p-2 shrink-0'
 					>
 						<LogOut className='w-3 h-3 sm:w-4 sm:h-4' />
 					</Button>
