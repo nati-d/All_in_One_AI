@@ -439,7 +439,7 @@ export default function AllInOneAIPage() {
 											>
 												<div className='whitespace-pre-wrap leading-relaxed text-sm sm:text-base'>
 													{message.sender === "assistant" 
-														? parseAIResponse(message.text)
+														? parseAIResponse(message.text, message.llm_used)
 														: message.text
 													}
 												</div>

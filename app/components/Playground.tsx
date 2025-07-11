@@ -91,7 +91,7 @@ export default function Playground() {
 							>
 								<div className={`text-xs sm:text-sm ${msg.role === "user" ? "text-primary-foreground text-right" : "text-foreground text-left"}`}>
 									{msg.role === "assistant" 
-										? parseAIResponse(msg.content)
+										? parseAIResponse(msg.content, selectedModel)
 										: msg.content
 									}
 								</div>
