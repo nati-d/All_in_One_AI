@@ -1,5 +1,5 @@
 import apiClient from "../../lib/axiosConfig";
-import type {LoginRequest, LoginResponse, RegisterRequest, RegisterResponse} from "../../types/auth";
+import type {LoginRequest, LoginResponse, RegisterRequest, RegisterResponse, RefreshTokenRequest, RefreshTokenResponse} from "../../types/auth";
 
 export const loginUser = async (credentials: LoginRequest): Promise<LoginResponse> => {
 	try {
@@ -19,6 +19,17 @@ export const registerUser = async (userData: RegisterRequest): Promise<RegisterR
 		return response.data;
 	} catch (error: any) {
 		console.error("Register error:", error);
+		throw error;
+	}
+};
+
+export const refreshToken = async (refreshTokenData: RefreshTokenRequest): Promise<RefreshTokenResponse> => {
+	try {
+		const response = await apiClient.post("/api/v1/auth/refresh-token", refreshTokenData);
+		console.log("Refresh token response:", response.data);
+		return response.data;
+	} catch (error: any) {
+		console.error("Refresh token error:", error);
 		throw error;
 	}
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import Link from "next/link";
 import {useRouter} from "next/navigation";
 import {useForm} from "react-hook-form";
@@ -14,7 +14,7 @@ export default function LoginPage() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState("");
 	const router = useRouter();
-	const {login} = useAuth();
+	const {login, isAuthenticated, loading} = useAuth();
 
 	const form = useForm<LoginFormData>({
 		resolver: zodResolver(loginSchema),
@@ -23,6 +23,13 @@ export default function LoginPage() {
 			password: "",
 		},
 	});
+
+	// Redirect authenticated users to home page
+	useEffect(() => {
+		if (!loading && isAuthenticated) {
+			router.push("/");
+		}
+	}, [isAuthenticated, loading, router]);
 
 	const onSubmit = async (data: LoginFormData) => {
 		setIsLoading(true);
@@ -66,6 +73,23 @@ export default function LoginPage() {
 			setIsLoading(false);
 		}
 	};
+
+	// Show loading while checking authentication
+	if (loading) {
+		return (
+			<div className='min-h-screen bg-background flex items-center justify-center'>
+				<div className='flex items-center space-x-2'>
+					<div className='w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin'></div>
+					<span className='text-foreground'>Loading...</span>
+				</div>
+			</div>
+		);
+	}
+
+	// Don't render if authenticated (will redirect)
+	if (isAuthenticated) {
+		return null;
+	}
 
 	return (
 		<div className='min-h-screen bg-background flex items-center justify-center px-3 sm:px-4 md:px-6 lg:px-8'>

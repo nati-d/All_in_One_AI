@@ -15,6 +15,7 @@ interface AuthContextType {
 	logout: () => void;
 	loading: boolean;
 	refreshToken: string | null;
+	updateTokens: (token: string, refreshToken: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -95,6 +96,12 @@ export function AuthProvider({children}: {children: ReactNode}) {
 		setRefreshToken(null);
 	};
 
+	const updateTokens = (token: string, refreshTokenValue: string) => {
+		localStorage.setItem("auth_token", token);
+		localStorage.setItem("refresh_token", refreshTokenValue);
+		setRefreshToken(refreshTokenValue);
+	};
+
 	const value = {
 		user,
 		isAuthenticated: !!user,
@@ -102,6 +109,7 @@ export function AuthProvider({children}: {children: ReactNode}) {
 		logout,
 		loading,
 		refreshToken,
+		updateTokens,
 	};
 
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

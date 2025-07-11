@@ -28,3 +28,12 @@ export interface RegisterResponse {
 		display_name: string;
 	};
 }
+
+export interface RefreshTokenRequest {
+	refresh_token: string;
+}
+
+export interface RefreshTokenResponse {
+	token: string;
+	refresh_token: string;
+}
