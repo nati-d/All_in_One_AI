@@ -174,4 +174,56 @@
 		font-size: 16px;
 	}
 }
+
+/* Custom audio slider styles */
+.slider {
+	-webkit-appearance: none;
+	appearance: none;
+	background: transparent;
+	cursor: pointer;
+}
+
+.slider::-webkit-slider-track {
+	height: 8px;
+	border-radius: 4px;
+}
+
+.slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	height: 16px;
+	width: 16px;
+	border-radius: 50%;
+	background: hsl(var(--primary));
+	cursor: pointer;
+	border: 2px solid hsl(var(--card));
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.slider::-webkit-slider-thumb:hover {
+	background: hsl(var(--primary));
+	transform: scale(1.1);
+	transition: transform 0.2s ease;
+}
+
+.slider::-moz-range-track {
+	height: 8px;
+	border-radius: 4px;
+	background: hsl(var(--muted));
+}
+
+.slider::-moz-range-thumb {
+	height: 16px;
+	width: 16px;
+	border-radius: 50%;
+	background: hsl(var(--primary));
+	cursor: pointer;
+	border: 2px solid hsl(var(--card));
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.slider::-moz-range-thumb:hover {
+	background: hsl(var(--primary));
+	transform: scale(1.1);
+}
 }

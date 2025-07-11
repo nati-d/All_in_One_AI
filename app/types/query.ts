@@ -11,9 +11,19 @@ export interface StabilityAIResponse {
 	image_base64: string;
 }
 
+// Add interface for parsed ElevenLabs response
+export interface ElevenLabsResponse {
+	audio_base64: string;
+}
+
 // Helper function to check if response is from Stability AI
 export function isStabilityResponse(llm_used: string): boolean {
 	return llm_used === "stability";
+}
+
+// Helper function to check if response is from ElevenLabs
+export function isElevenLabsResponse(llm_used: string): boolean {
+	return llm_used === "elevenlabs";
 }
 
 // Helper function to parse Stability AI response
@@ -26,6 +36,20 @@ export function parseStabilityResponse(response: string): StabilityAIResponse | 
 		return null;
 	} catch (error) {
 		console.error('Failed to parse Stability AI response:', error);
+		return null;
+	}
+}
+
+// Helper function to parse ElevenLabs response
+export function parseElevenLabsResponse(response: string): ElevenLabsResponse | null {
+	try {
+		const parsed = JSON.parse(response);
+		if (parsed && typeof parsed === 'object' && 'audio_base64' in parsed) {
+			return parsed as ElevenLabsResponse;
+		}
+		return null;
+	} catch (error) {
+		console.error('Failed to parse ElevenLabs response:', error);
 		return null;
 	}
 }
