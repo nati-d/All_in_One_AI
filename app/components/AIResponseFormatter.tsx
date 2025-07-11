@@ -1,6 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Copy, Check, Download, ImageIcon, Volume2, Play, Pause, RotateCcw } from "lucide-react";
+import React, { useState } from "react";
+import { Copy, Check } from "lucide-react";
 import { isStabilityResponse, parseStabilityResponse, isElevenLabsResponse, parseElevenLabsResponse } from "../types/query";
+import { ImageDisplay } from "./ImageDisplay";
+import { AudioDisplay } from "./AudioDisplay";
 
 // Global counter to ensure unique keys across all parsing functions
 let globalKeyCounter = 0;
@@ -10,328 +12,6 @@ let globalKeyCounter = 0;
  */
 function generateUniqueKey(prefix: string): string {
   return `${prefix}-${Date.now()}-${++globalKeyCounter}`;
-}
-
-/**
- * Audio component for displaying ElevenLabs generated audio
- */
-interface AudioDisplayProps {
-  audioBase64: string;
-}
-
-function AudioDisplay({ audioBase64 }: AudioDisplayProps) {
-  const [copied, setCopied] = useState(false);
-  const [downloaded, setDownloaded] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [duration, setDuration] = useState(0);
-  const [currentTime, setCurrentTime] = useState(0);
-  const audioRef = useRef<HTMLAudioElement>(null);
-
-  const audioUrl = `data:audio/mp3;base64,${audioBase64}`;
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const updateTime = () => setCurrentTime(audio.currentTime);
-    const updateDuration = () => setDuration(audio.duration);
-    const handleEnded = () => setIsPlaying(false);
-
-    audio.addEventListener('timeupdate', updateTime);
-    audio.addEventListener('loadedmetadata', updateDuration);
-    audio.addEventListener('ended', handleEnded);
-
-    return () => {
-      audio.removeEventListener('timeupdate', updateTime);
-      audio.removeEventListener('loadedmetadata', updateDuration);
-      audio.removeEventListener('ended', handleEnded);
-    };
-  }, []);
-
-  const togglePlayPause = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    if (isPlaying) {
-      audio.pause();
-    } else {
-      audio.play();
-    }
-    setIsPlaying(!isPlaying);
-  };
-
-  const resetAudio = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    
-    audio.currentTime = 0;
-    setCurrentTime(0);
-    setIsPlaying(false);
-    audio.pause();
-  };
-
-  const formatTime = (time: number) => {
-    if (isNaN(time)) return "0:00";
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-  };
-
-  const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    
-    const newTime = (parseFloat(e.target.value) / 100) * duration;
-    audio.currentTime = newTime;
-    setCurrentTime(newTime);
-  };
-
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(audioBase64);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy audio base64:', err);
-    }
-  };
-
-  const downloadAudio = () => {
-    try {
-      const link = document.createElement('a');
-      link.href = audioUrl;
-      link.download = `elevenlabs-audio-${Date.now()}.mp3`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      setDownloaded(true);
-      setTimeout(() => setDownloaded(false), 2000);
-    } catch (err) {
-      console.error('Failed to download audio:', err);
-    }
-  };
-
-  const progressPercentage = duration > 0 ? (currentTime / duration) * 100 : 0;
-
-  return (
-    <div className="my-2 rounded-lg overflow-hidden border border-border bg-card">
-      {/* Header with audio info and actions */}
-      <div className="flex items-center justify-between px-2 sm:px-4 py-1.5 sm:py-2 bg-muted border-b border-border">
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          <Volume2 className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
-          <span className="text-xs text-muted-foreground font-medium">Generated Audio</span>
-          <span className="text-xs text-muted-foreground">• {formatTime(duration)}</span>
-        </div>
-        <div className="flex items-center gap-1 sm:gap-2">
-          <button
-            onClick={copyToClipboard}
-            className="flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs text-muted-foreground hover:text-foreground transition-colors rounded hover:bg-accent"
-          >
-            {copied ? (
-              <>
-                <Check className="w-3 h-3" />
-                <span className="hidden sm:inline">Copied!</span>
-              </>
-            ) : (
-              <>
-                <Copy className="w-3 h-3" />
-                <span className="hidden sm:inline">Copy</span>
-              </>
-            )}
-          </button>
-          <button
-            onClick={downloadAudio}
-            className="flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs text-muted-foreground hover:text-foreground transition-colors rounded hover:bg-accent"
-          >
-            {downloaded ? (
-              <>
-                <Check className="w-3 h-3" />
-                <span className="hidden sm:inline">Downloaded!</span>
-              </>
-            ) : (
-              <>
-                <Download className="w-3 h-3" />
-                <span className="hidden sm:inline">Download</span>
-              </>
-            )}
-          </button>
-        </div>
-      </div>
-      
-      {/* Audio player content */}
-      <div className="p-2 sm:p-4 bg-card">
-        <audio ref={audioRef} src={audioUrl} preload="metadata" />
-        
-        {/* Audio controls */}
-        <div className="flex items-center gap-2 sm:gap-4">
-          {/* Play/Pause button */}
-          <button
-            onClick={togglePlayPause}
-            className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full transition-colors"
-          >
-            {isPlaying ? (
-              <Pause className="w-4 h-4 sm:w-5 sm:h-5" />
-            ) : (
-              <Play className="w-4 h-4 sm:w-5 sm:h-5 ml-0.5" />
-            )}
-          </button>
-
-          {/* Reset button */}
-          <button
-            onClick={resetAudio}
-            className="flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <RotateCcw className="w-3 h-3 sm:w-4 sm:h-4" />
-          </button>
-
-          {/* Progress bar */}
-          <div className="flex-1 flex items-center gap-2">
-            <span className="text-xs text-muted-foreground min-w-[2.5rem]">
-              {formatTime(currentTime)}
-            </span>
-            <div className="flex-1 relative">
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={progressPercentage}
-                onChange={handleProgressChange}
-                className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer slider"
-                style={{
-                  background: `linear-gradient(to right, hsl(var(--primary)) 0%, hsl(var(--primary)) ${progressPercentage}%, hsl(var(--muted)) ${progressPercentage}%, hsl(var(--muted)) 100%)`
-                }}
-              />
-            </div>
-            <span className="text-xs text-muted-foreground min-w-[2.5rem]">
-              {formatTime(duration)}
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/**
- * Image component for displaying Stability AI generated images
- */
-interface ImageDisplayProps {
-  imageBase64: string;
-  seed: string;
-  finishReason: string;
-}
-
-function ImageDisplay({ imageBase64, seed, finishReason }: ImageDisplayProps) {
-  const [copied, setCopied] = useState(false);
-  const [downloaded, setDownloaded] = useState(false);
-
-  const imageUrl = `data:image/jpeg;base64,${imageBase64}`;
-
-  const copyToClipboard = async () => {
-    try {
-      // Create a blob from the base64 data and copy as image
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      
-      await navigator.clipboard.write([
-        new ClipboardItem({
-          [blob.type]: blob
-        })
-      ]);
-      
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy image:', err);
-      // Fallback: copy base64 string
-      try {
-        await navigator.clipboard.writeText(imageBase64);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      } catch (fallbackErr) {
-        console.error('Failed to copy base64:', fallbackErr);
-      }
-    }
-  };
-
-  const downloadImage = () => {
-    try {
-      const link = document.createElement('a');
-      link.href = imageUrl;
-      link.download = `stability-ai-image-${seed}.jpg`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      setDownloaded(true);
-      setTimeout(() => setDownloaded(false), 2000);
-    } catch (err) {
-      console.error('Failed to download image:', err);
-    }
-  };
-
-  return (
-    <div className="my-2 rounded-lg overflow-hidden border border-border bg-card">
-      {/* Header with image info and actions */}
-      <div className="flex items-center justify-between px-2 sm:px-4 py-1.5 sm:py-2 bg-muted border-b border-border">
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          <ImageIcon className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
-          <span className="text-xs text-muted-foreground font-medium">Generated Image</span>
-          <span className="text-xs text-muted-foreground">• Seed: {seed}</span>
-        </div>
-        <div className="flex items-center gap-1 sm:gap-2">
-          <button
-            onClick={copyToClipboard}
-            className="flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs text-muted-foreground hover:text-foreground transition-colors rounded hover:bg-accent"
-          >
-            {copied ? (
-              <>
-                <Check className="w-3 h-3" />
-                <span className="hidden sm:inline">Copied!</span>
-              </>
-            ) : (
-              <>
-                <Copy className="w-3 h-3" />
-                <span className="hidden sm:inline">Copy</span>
-              </>
-            )}
-          </button>
-          <button
-            onClick={downloadImage}
-            className="flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs text-muted-foreground hover:text-foreground transition-colors rounded hover:bg-accent"
-          >
-            {downloaded ? (
-              <>
-                <Check className="w-3 h-3" />
-                <span className="hidden sm:inline">Downloaded!</span>
-              </>
-            ) : (
-              <>
-                <Download className="w-3 h-3" />
-                <span className="hidden sm:inline">Download</span>
-              </>
-            )}
-          </button>
-        </div>
-      </div>
-      
-      {/* Image content */}
-      <div className="p-2 sm:p-4 bg-card">
-        <img
-          src={imageUrl}
-          alt="Generated by Stability AI"
-          className="w-full h-auto rounded-lg shadow-sm border border-border max-w-lg mx-auto block"
-          style={{ maxHeight: '512px', objectFit: 'contain' }}
-        />
-        {finishReason !== 'SUCCESS' && (
-          <div className="mt-2 text-xs text-amber-600 bg-amber-50 dark:bg-amber-900/20 dark:text-amber-400 p-2 rounded">
-            Status: {finishReason}
-          </div>
-        )}
-      </div>
-    </div>
-  );
 }
 
 /**
@@ -444,7 +124,7 @@ function parseLists(text: string): React.ReactNode[] {
     // Add bullet point
     parts.push(
       <div key={generateUniqueKey('bullet')} className="flex items-start gap-1 sm:gap-2 mb-0.5">
-        <span className="text-primary min-w-[1rem] sm:min-w-[1.5rem] text-sm sm:text-base">•</span>
+        <span className="text-primary min-w-[1rem] sm:min-w-[1.5rem] text-sm sm:text-base">{bulletMatch[1]}</span>
         <span className="text-sm sm:text-base">{parseInlineFormatting(bulletMatch[2])}</span>
       </div>
     );
@@ -552,7 +232,8 @@ function parseItalic(text: string): React.ReactNode[] {
   while ((italicMatch = italicRegex.exec(text)) !== null) {
     // Add text before italic
     if (italicMatch.index > lastIndex) {
-      parts.push(text.slice(lastIndex, italicMatch.index));
+      const beforeText = text.slice(lastIndex, italicMatch.index);
+      parts.push(beforeText);
     }
     
     // Add italic text
@@ -567,48 +248,21 @@ function parseItalic(text: string): React.ReactNode[] {
   
   // Add remaining text after last italic
   if (lastIndex < text.length) {
-    parts.push(text.slice(lastIndex));
+    const remainingText = text.slice(lastIndex);
+    parts.push(remainingText);
   }
   
   return parts.length > 0 ? parts : [text];
 }
 
 /**
- * Combines consecutive text elements to reduce spacing
- */
-function combineTextElements(elements: React.ReactNode[]): React.ReactNode[] {
-  const combined: React.ReactNode[] = [];
-  let currentText = '';
-  
-  for (const element of elements) {
-    if (typeof element === 'string') {
-      currentText += element;
-    } else {
-      // If we have accumulated text, add it first
-      if (currentText) {
-        combined.push(currentText);
-        currentText = '';
-      }
-      combined.push(element);
-    }
-  }
-  
-  // Add any remaining text
-  if (currentText) {
-    combined.push(currentText);
-  }
-  
-  return combined;
-}
-
-/**
- * Parses headers (### Header, ## Header, # Header)
+ * Parses headers (# ## ### etc.)
  */
 function parseHeaders(text: string): React.ReactNode[] {
   const parts: React.ReactNode[] = [];
   let lastIndex = 0;
   
-  // Handle headers (###, ##, #)
+  // Handle headers (# ## ### etc.)
   const headerRegex = /^(#{1,6})\s+(.+)$/gm;
   let headerMatch;
   
@@ -619,35 +273,22 @@ function parseHeaders(text: string): React.ReactNode[] {
       parts.push(...parseLists(beforeText));
     }
     
-    // Determine header level and styling
+    // Determine header level
     const level = headerMatch[1].length;
-    const headerText = headerMatch[2];
+    const HeaderTag = `h${Math.min(level, 6)}` as keyof JSX.IntrinsicElements;
     
-    let headerElement;
-    switch (level) {
-      case 1:
-        headerElement = <h1 key={generateUniqueKey('h1')} className="text-xl sm:text-2xl font-bold text-foreground mt-2 mb-1">{parseInlineFormatting(headerText)}</h1>;
-        break;
-      case 2:
-        headerElement = <h2 key={generateUniqueKey('h2')} className="text-lg sm:text-xl font-semibold text-foreground mt-2 mb-1">{parseInlineFormatting(headerText)}</h2>;
-        break;
-      case 3:
-        headerElement = <h3 key={generateUniqueKey('h3')} className="text-base sm:text-lg font-semibold text-foreground mt-1 mb-1">{parseInlineFormatting(headerText)}</h3>;
-        break;
-      case 4:
-        headerElement = <h4 key={generateUniqueKey('h4')} className="text-sm sm:text-base font-medium text-foreground mt-1 mb-0.5">{parseInlineFormatting(headerText)}</h4>;
-        break;
-      case 5:
-        headerElement = <h5 key={generateUniqueKey('h5')} className="text-xs sm:text-sm font-medium text-foreground mt-1 mb-0.5">{parseInlineFormatting(headerText)}</h5>;
-        break;
-      case 6:
-        headerElement = <h6 key={generateUniqueKey('h6')} className="text-xs font-medium text-foreground mt-1 mb-0.5">{parseInlineFormatting(headerText)}</h6>;
-        break;
-      default:
-        headerElement = <h3 key={generateUniqueKey('h3')} className="text-base sm:text-lg font-semibold text-foreground mt-1 mb-1">{parseInlineFormatting(headerText)}</h3>;
-    }
+    // Add header
+    parts.push(
+      <HeaderTag key={generateUniqueKey('header')} className={`font-bold mb-2 mt-4 text-foreground ${
+        level === 1 ? 'text-xl sm:text-2xl' :
+        level === 2 ? 'text-lg sm:text-xl' :
+        level === 3 ? 'text-base sm:text-lg' :
+        'text-sm sm:text-base'
+      }`}>
+        {headerMatch[2]}
+      </HeaderTag>
+    );
     
-    parts.push(headerElement);
     lastIndex = headerMatch.index + headerMatch[0].length;
   }
   
@@ -657,8 +298,34 @@ function parseHeaders(text: string): React.ReactNode[] {
     parts.push(...parseLists(remainingText));
   }
   
-  const result = parts.length > 0 ? parts : parseInlineFormatting(text);
+  const result = parts.length > 0 ? parts : parseLists(text);
   return combineTextElements(result);
+}
+
+/**
+ * Combines consecutive text elements into single strings
+ */
+function combineTextElements(parts: React.ReactNode[]): React.ReactNode[] {
+  const combined: React.ReactNode[] = [];
+  let textBuffer = '';
+  
+  for (const part of parts) {
+    if (typeof part === 'string') {
+      textBuffer += part;
+    } else {
+      if (textBuffer) {
+        combined.push(textBuffer);
+        textBuffer = '';
+      }
+      combined.push(part);
+    }
+  }
+  
+  if (textBuffer) {
+    combined.push(textBuffer);
+  }
+  
+  return combined;
 }
 
 /**
@@ -724,7 +391,7 @@ interface AIResponseFormatterProps {
 
 export function AIResponseFormatter({ text, className = "" }: AIResponseFormatterProps) {
   return (
-    <div className={`leading-none space-y-0 text-sm sm:text-base ${className}`}>
+    <div className={`space-y-1 sm:space-y-2 ${className}`}>
       {parseAIResponse(text)}
     </div>
   );
