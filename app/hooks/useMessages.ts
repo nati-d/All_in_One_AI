@@ -47,7 +47,7 @@ export function useMessages() {
 			// Add error message to chat
 			setMessages((prev) => [...prev, {
 				sender: "assistant",
-				text: errorMessage,
+				text: `Error: ${errorMessage}`,
 				timestamp: new Date(),
 			}]);
 
