@@ -34,6 +34,7 @@ export interface RefreshTokenRequest {
 }
 
 export interface RefreshTokenResponse {
-	token: string;
+	access_token: string;
 	refresh_token: string;
+	token_type: string;
 }

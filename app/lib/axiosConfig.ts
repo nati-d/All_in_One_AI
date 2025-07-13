@@ -39,18 +39,23 @@ const refreshAccessToken = async (): Promise<string> => {
 			}
 		);
 
-		const { token, refresh_token } = response.data;
+		const { access_token, refresh_token } = response.data;
 		
-		if (!token || !refresh_token) {
+		if (!access_token || !refresh_token) {
 			throw new Error("Invalid refresh response: missing tokens");
 		}
 		
 		// Update localStorage with new tokens
-		localStorage.setItem("auth_token", token);
+		localStorage.setItem("auth_token", access_token);
 		localStorage.setItem("refresh_token", refresh_token);
 		
+		// Notify AuthContext about token update
+		window.dispatchEvent(new CustomEvent("tokens-updated", {
+			detail: { access_token, refresh_token }
+		}));
+		
 		console.log("✅ Token refreshed successfully");
-		return token;
+		return access_token;
 	} catch (error: any) {
 		console.error("❌ Token refresh failed:", {
 			status: error.response?.status,

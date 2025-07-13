@@ -14,7 +14,6 @@ interface AuthContextType {
 	login: (token: string, refreshToken: string, user: User) => void;
 	logout: () => void;
 	loading: boolean;
-	refreshToken: string | null;
 	updateTokens: (token: string, refreshToken: string) => void;
 }
 
@@ -73,11 +72,20 @@ export function AuthProvider({children}: {children: ReactNode}) {
 			setRefreshToken(null);
 		};
 
+		// Listen for token updates from axios interceptor
+		const handleTokensUpdated = (event: any) => {
+			console.log("🔄 Tokens updated event received - updating AuthContext");
+			const { refresh_token } = event.detail;
+			setRefreshToken(refresh_token);
+		};
+
 		window.addEventListener("auth-cleared", handleAuthClear);
+		window.addEventListener("tokens-updated", handleTokensUpdated);
 
 		return () => {
 			window.removeEventListener("storage", handleStorageChange);
 			window.removeEventListener("auth-cleared", handleAuthClear);
+			window.removeEventListener("tokens-updated", handleTokensUpdated);
 		};
 	}, []);
 
@@ -109,7 +117,6 @@ export function AuthProvider({children}: {children: ReactNode}) {
 		login,
 		logout,
 		loading,
-		refreshToken,
 		updateTokens,
 	};
 
