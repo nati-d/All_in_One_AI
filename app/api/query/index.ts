@@ -9,12 +9,19 @@ export const SendQuery = async (query: string, files?: FileAttachment[]): Promis
 			const formData = new FormData();
 			formData.append("query", query);
 			
-			// Add files to FormData
+			// Check if any valid files exist
+			let hasValidFiles = false;
 			files.forEach((fileAttachment, index) => {
 				if (fileAttachment.file) {
 					formData.append(`files`, fileAttachment.file);
+					hasValidFiles = true;
 				}
 			});
+
+			// If no valid files were found, append "None"
+			if (!hasValidFiles) {
+				formData.append("files", "None");
+			}
 
 			const response = await apiClient.post("/api/v1/query", formData, {
 				headers: {
@@ -23,9 +30,10 @@ export const SendQuery = async (query: string, files?: FileAttachment[]): Promis
 			});
 			return response.data;
 		} else {
-			// Regular text-only query
+			// Regular text-only query - include files: "None"
 			const response = await apiClient.post("/api/v1/query", {
 				query: query,
+				files: "None",
 			});
 			return response.data;
 		}
