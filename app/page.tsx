@@ -25,12 +25,17 @@ export default function AllInOneAIPage() {
 	}, [messages]);
 
 	// Handle sending messages
-	const handleSendMessage = async (messageText?: string) => {
+	const handleSendMessage = async (messageText?: string, files?: import("@/app/types/query").FileAttachment[]) => {
 		const textToSend = messageText || input.trim();
-		if (!textToSend) return;
+		if (!textToSend && (!files || files.length === 0)) return;
 
 		setInput("");
-		await sendMessage(textToSend);
+		await sendMessage(textToSend, files);
+	};
+
+	// Handle sending messages from MessageInput component
+	const handleMessageInputSend = async (files?: import("@/app/types/query").FileAttachment[]) => {
+		await handleSendMessage(undefined, files);
 	};
 
 	// Handle clicking on example prompts
@@ -92,7 +97,7 @@ export default function AllInOneAIPage() {
 						<MessageInput
 							input={input}
 							setInput={setInput}
-							onSendMessage={handleSendMessage}
+							onSendMessage={handleMessageInputSend}
 							isLoading={isLoading}
 						/>
 					</div>

@@ -3,6 +3,22 @@ export type SendQueryResponse = {
 	response: string;
 };
 
+// File attachment types
+export interface FileAttachment {
+	id: string;
+	name: string;
+	type: string;
+	size: number;
+	url?: string;
+	base64?: string;
+	file?: File;
+}
+
+export interface SendQueryRequest {
+	query: string;
+	files?: FileAttachment[];
+}
+
 // Add interface for parsed Stability AI response
 export interface StabilityAIResponse {
 	finish_reason: string;

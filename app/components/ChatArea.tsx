@@ -2,12 +2,15 @@ import React from "react";
 import { Bot, ArrowRight } from "lucide-react";
 import { cn, formatTimestamp } from "@/lib/utils";
 import { parseAIResponse } from "./AIResponseFormatter";
+import { FileDisplay } from "./FileDisplay";
+import type { FileAttachment } from "@/app/types/query";
 
 interface Message {
 	sender: "user" | "assistant";
 	text: string;
 	timestamp: Date;
 	llm_used?: string;
+	files?: FileAttachment[];
 }
 
 interface ChatAreaProps {
@@ -66,12 +69,23 @@ export function ChatArea({ messages, isLoading, onPromptClick, messagesEndRef }:
 								message.sender === "user" ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
 							)}
 						>
-							<div className='whitespace-pre-wrap leading-relaxed text-sm sm:text-base'>
-								{message.sender === "assistant" 
-									? parseAIResponse(message.text, message.llm_used)
-									: message.text
-								}
-							</div>
+							{/* File attachments */}
+							{message.files && message.files.length > 0 && (
+								<div className='mb-2'>
+									<FileDisplay files={message.files} />
+								</div>
+							)}
+							
+							{/* Message text */}
+							{message.text && (
+								<div className='whitespace-pre-wrap leading-relaxed text-sm sm:text-base'>
+									{message.sender === "assistant" 
+										? parseAIResponse(message.text, message.llm_used)
+										: message.text
+									}
+								</div>
+							)}
+							
 							<div
 								className={cn(
 									"flex items-center justify-between mt-1.5 sm:mt-2 text-xs opacity-70",
