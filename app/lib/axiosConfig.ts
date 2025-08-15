@@ -74,7 +74,7 @@ const refreshAccessToken = async (): Promise<string> => {
 };
 
 // API Configuration
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL = "https://allinone-service-813842978116.us-central1.run.app";
 const API_TIMEOUT =50000; // 30 seconds
 
 // Create axios instance

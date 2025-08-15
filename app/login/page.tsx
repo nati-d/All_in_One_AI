@@ -24,10 +24,10 @@ export default function LoginPage() {
 		},
 	});
 
-	// Redirect authenticated users to home page
+	// Redirect authenticated users to dashboard
 	useEffect(() => {
 		if (!loading && isAuthenticated) {
-			router.push("/");
+			router.push("/dashboard");
 		}
 	}, [isAuthenticated, loading, router]);
 
@@ -40,7 +40,7 @@ export default function LoginPage() {
 
 			if (response.token) {
 				login(response.token, response.refresh_token, response.user);
-				router.push("/");
+				router.push("/dashboard");
 			} else {
 				setError("Invalid response from server. Please try again.");
 			}
